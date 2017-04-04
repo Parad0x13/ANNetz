@@ -34,8 +34,6 @@ someFunction() {
 }
 ```
 
-**No** trailing whitespace
-
 Tabs for indentation, spaces for alignment
 
 ```C++
@@ -45,6 +43,8 @@ vector<std::string> pokemon {
 	"Squirtle",   "Wartortle",  "Blastoise"
 }
 ```
+
+**No** trailing whitespace
 
 ## Code Enforcer
 Not yet decided
