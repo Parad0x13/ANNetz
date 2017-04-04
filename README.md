@@ -2,16 +2,19 @@
 
 ## Graphics
 Not yet decided
+
 	GDI+?
 	DX?
 	OpenGL/GLUT?
 
 ## Language
 C++14 for main project
+
 C# for old project that is being turned into C++14
 
 ## IDE
 Code::Blocks for now
+
 Visual Studios if it doesn't meet expectations
 
 ## Compiler
@@ -22,7 +25,9 @@ Searching for it, expect by 07 April 2017 (Fri)
 
 ## Syntax
 Inline opening scope brackets
+
 **No** trailing whitespace
+
 Tabs for indentation, spaces for alignment
 
 ## Code Enforcer
@@ -30,7 +35,9 @@ Not yet decided
 
 ## Main Branches
 C#
+
 C++
+
 master
 
 ## Helpful Resources/Notes
