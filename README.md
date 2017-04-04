@@ -30,7 +30,8 @@ Inline opening scope brackets
 
 ```someFunction() {
 	...
-}```
+}
+```
 
 **No** trailing whitespace
 
@@ -40,7 +41,8 @@ Tabs for indentation, spaces for alignment
 	"Bulbasaur",  "Ivysaur",    "Venusaur",
 	"Charmander", "Charmeleon", "Charizard",
 	"Squirtle",   "Wartortle",  "Blastoise"
-}```
+}
+```
 
 ## Code Enforcer
 Not yet decided
