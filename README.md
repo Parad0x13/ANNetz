@@ -28,9 +28,19 @@ Searching for it, expect by 07 April 2017 (Fri)
 ## Syntax
 Inline opening scope brackets
 
+	someFunction() {
+		...
+	}
+
 **No** trailing whitespace
 
 Tabs for indentation, spaces for alignment
+
+	vector<std::string> pokemon {
+		"Bulbasaur",  "Ivysaur",    "Venusaur",
+		"Charmander", "Charmeleon", "Charizard",
+		"Squirtle",   "Wartortle",  "Blastoise"
+	}
 
 ## Code Enforcer
 Not yet decided
