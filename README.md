@@ -1,38 +1,38 @@
-## ANNetz (Artificial Neural Netzwerk)
+# ANNetz (Artificial Neural Netzwerk)
 
-# Graphics
+## Graphics
 	Not yet decided
 		GDI+?
 		DX?
 		OpenGL/GLUT?
 
-# Language
+## Language
 	C++14 for main project
 	C# for old project that is being turned into C++14
 
-# IDE
+## IDE
 	Code::Blocks for now
 	Visual Studios if it doesn't meet expectations
 
-# Compiler
+## Compiler
 	GCC + GDB
 
-# UML software
+## UML software
 	Searching for it, expect by 07 April 2017 (Fri)
 
-# Syntax
+## Syntax
 	Inline opening scope brackets
 	__No__ trailing whitespace
 	Tabs for indentation, spaces for alignment
 
-# Code Enforcer
+## Code Enforcer
 	Not yet decided
 
-# Main Branches
+## Main Branches
 	C#
 	C++
 	master
 
-# Helpful Resources/Notes
+## Helpful Resources/Notes
 	[Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 	git clean -df
