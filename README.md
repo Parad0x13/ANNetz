@@ -22,7 +22,7 @@
 
 ## Syntax
 	Inline opening scope brackets
-    **No** trailing whitespace
+**No** trailing whitespace
 	Tabs for indentation, spaces for alignment
 
 ## Code Enforcer
