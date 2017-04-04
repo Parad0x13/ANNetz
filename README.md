@@ -1,7 +1,10 @@
-ANNetz (Artificial Neural Netzwerk)
+## ANNetz (Artificial Neural Netzwerk)
 
 # Graphics
-	GDI+? Maybe do some other research? DX maybe? GLUT
+	Not yet decided
+		GDI+?
+		DX?
+		OpenGL/GLUT?
 
 # Language
 	C++14 for main project
@@ -18,18 +21,18 @@ ANNetz (Artificial Neural Netzwerk)
 	Searching for it, expect by 07 April 2017 (Fri)
 
 # Syntax
-	Custom
-
-# Tabs/Spaces
+	Inline opening scope brackets
+	__No__ trailing whitespace
 	Tabs for indentation, spaces for alignment
 
 # Code Enforcer
-	TBD
+	Not yet decided
 
-# Trailing Whitespace
-	NO!
-
-# Main branches
+# Main Branches
 	C#
 	C++
 	master
+
+# Helpful Resources/Notes
+	[Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+	git clean -df
