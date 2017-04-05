@@ -48,11 +48,9 @@ vector<std::string> pokemon {
 Not yet decided
 
 ## Main Branches
-C#
-
-C++
-
-master
+	C#
+	C++
+	master
 
 ## Helpful Resources/Notes
 [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
