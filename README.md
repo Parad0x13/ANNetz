@@ -53,6 +53,8 @@ Not yet decided
 ## Helpful Resources/Notes
 [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
+[Live Markdown Editor](http://dillinger.io/)
+
 [Google's C++ Syntax Guide](http://google.github.io/styleguide/cppguide.html)
 
 git clean -df
