@@ -3,8 +3,6 @@
 
 #include "headers.h"
 
-using namespace std;
-
 class Neuron {
 public:
     Neuron();
