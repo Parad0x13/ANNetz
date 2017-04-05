@@ -20,6 +20,17 @@ bool Neuron::add_output(Neuron* n) {
 	return true;
 }
 
+double Neuron::calc_Output(Neuron::TransferFunction* tf) {
+	switch ((int)tf) {
+	case (int)Neuron::Step:
+		if (InputSum > 0) { Output = 1; }
+		else { Output = 0; }
+		break;
+	case (int)Neuron::Sigmoid: Output = 1 / (1 + std::exp(-InputSum)); break;
+	}
+	return Output;
+}
+
 string Neuron::descriptor() {
 	stringstream ss;
 	ss << "[" << tag << ": " << this << "]";
