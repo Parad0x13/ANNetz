@@ -3,11 +3,9 @@
 ## Graphics
 Not yet decided
 
-GDI+?
-
-DX?
-
-OpenGL/GLUT?
+    GDI+?
+    DX?
+    OpenGL/GLUT?
 
 ## Language
 C++14 for main project
