@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <sstream>
 #include <random>
 #include <vector>
 #include <chrono>
@@ -8,3 +9,5 @@
 
 #include "Neuron.h"
 #include "Utility.h"
+
+using namespace std;

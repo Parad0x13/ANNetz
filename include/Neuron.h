@@ -3,20 +3,23 @@
 
 #include "headers.h"
 
+using namespace std;
+
 class Neuron {
 public:
     Neuron();
     virtual ~Neuron();
 
     bool add_input(Neuron*);
-    //bool add_output(Neuron&);
+    bool add_output(Neuron*);
 
-	std::string tag = generateTag(3);
+	string tag = generateTag(3);
+	string descriptor();
 
 private:
-	friend std::ostream& operator<<(std::ostream& stream, Neuron& n);
+	friend ostream& operator<<(ostream&, Neuron&);
 
-	std::vector<Neuron*> inputs, outputs;	// We want to add by pointer so that they are not copied on the stack
+	vector<Neuron*> inputs, outputs;	// We want to add by pointer so that they are not copied on the stack
 };
 
 #endif

@@ -1,7 +1,5 @@
 #include "headers.h"
 
-using namespace std;
-
 Neuron::Neuron() {
 	//
 }
@@ -16,22 +14,32 @@ bool Neuron::add_input(Neuron* n) {
 	return true;
 }
 
-/*bool Neuron::add_output(Neuron& n) {
+bool Neuron::add_output(Neuron* n) {
 	outputs.push_back(n);
 
 	return true;
-}*/
+}
+
+string Neuron::descriptor() {
+	stringstream ss;
+	ss << "[" << tag << ": " << this << "]";
+	return ss.str();
+}
 
 ostream& operator<<(ostream& stream, Neuron& n) {
-	stream << "Neuron(" << &n << ") [" << n.tag << "]";
+	stream << n.descriptor();
 
-	stream << "\n\tInputs: ";
-	for(input : n.inputs)
-		stream << (*input).tag << ": " << input;
+	stream << "\n\tInputs\n";
+	for(ptr : n.inputs) {
+		Neuron &input = *ptr;
+		stream << "\t" << input.descriptor() << endl;
+	}
 
-	/*stream << "\n\tOutputs: ";
-	for(output : n.outputs)
-		stream << output.tag;*/
+	stream << "\tOutputs\n";
+	for(ptr : n.outputs) {
+		Neuron &output = *ptr;
+		stream << "\t" << output.descriptor() << endl;
+	}
 
 	return stream;
 };
