@@ -30,13 +30,13 @@ ostream& operator<<(ostream& stream, Neuron& n) {
 	stream << n.descriptor();
 
 	stream << "\n\tInputs\n";
-	for(ptr : n.inputs) {
+	for(auto ptr : n.inputs) {
 		Neuron &input = *ptr;
 		stream << "\t" << input.descriptor() << endl;
 	}
 
 	stream << "\tOutputs\n";
-	for(ptr : n.outputs) {
+	for(auto ptr : n.outputs) {
 		Neuron &output = *ptr;
 		stream << "\t" << output.descriptor() << endl;
 	}
