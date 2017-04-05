@@ -2,5 +2,6 @@
 
 int main() {
 	Neuron neuron;
-	cout << neuron << endl;
+	Neuron neuron1;
+	cout << neuron << neuron1 << endl;
 }
