@@ -1,0 +1,30 @@
+# depslib dependency file v1.0
+1491364751 source:c:\users\bryan\desktop\annetz\src\neuron.cpp
+	"headers.h"
+
+1491364828 c:\users\bryan\desktop\annetz\include\neuron.h
+	"headers.h"
+
+1491357308 source:c:\users\bryan\desktop\annetz\main.cpp
+	<iostream>
+	"Neuron.h"
+
+1491362206 source:c:\users\bryan\desktop\annetz\src\utility.cpp
+	"headers.h"
+
+1491362081 c:\users\bryan\desktop\annetz\include\utility.h
+
+1491362592 c:\users\bryan\desktop\annetz\include\headers.h
+	<iostream>
+	<cstdlib>
+	<string>
+	<random>
+	<vector>
+	<chrono>
+	<ctime>
+	"Neuron.h"
+	"Utility.h"
+
+1491364483 source:c:\users\bryan\desktop\annetz\src\main.cpp
+	"headers.h"
+
