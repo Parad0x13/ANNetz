@@ -21,6 +21,7 @@ public:
 
 private:
 	double InputSum;
+	double[] Weights;
 
 	friend ostream& operator<<(ostream&, Neuron&);
 

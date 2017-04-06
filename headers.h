@@ -8,6 +8,7 @@
 #include <ctime>
 
 #include "Neuron.h"
+#include "Network.h"
 #include "Utility.h"
 
 using namespace std;
