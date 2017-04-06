@@ -8,27 +8,52 @@ Neuron::~Neuron() {
 	// Neural connections will be managed on the stack (possibly), they will need to be managed here
 }
 
-bool Neuron::add_input(Neuron* n) {
+bool Neuron::addInput(Neuron* n) {
 	inputs.push_back(n);
 
 	return true;
 }
 
-bool Neuron::add_output(Neuron* n) {
+bool Neuron::addOutput(Neuron* n) {
 	outputs.push_back(n);
 
 	return true;
 }
 
-double Neuron::calc_Output(Neuron::TransferFunction* tf) {
-	switch ((int)tf) {
-	case (int)Neuron::Step:
-		if (InputSum > 0) { Output = 1; }
-		else { Output = 0; }
-		break;
-	case (int)Neuron::Sigmoid: Output = 1 / (1 + std::exp(-InputSum)); break;
+// [TODO] Improve this algorithm using memoization
+// [TODO] Don't only use Step TransferFunction
+double Neuron::inputSum() {
+	double retVal = 0;
+
+	for (auto ptr : inputs) {
+		Neuron &input = *ptr;
+		retVal += input.output(Step);
 	}
-	return Output;
+
+	return retVal;
+}
+
+// [TODO] Improve this algorithm using memoization
+double Neuron::output(TransferFunction tf) {
+	double retVal = 0;
+
+	switch (tf) {
+	case Step:
+		return 1;
+		if (inputSum() > 0) {
+			retVal = 1;
+		}
+		else {
+			retVal = 0;
+		}
+		break;
+	case Sigmoid:
+		return 2;
+		retVal = 1 / (1 + exp(-inputSum()));
+		break;
+	}
+
+	return retVal;
 }
 
 string Neuron::descriptor() {

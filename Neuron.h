@@ -5,23 +5,27 @@
 
 class Neuron {
 public:
-	enum TransferFunction{Step, Sigmoid}; //step = if x > 0 then 1 else 0; sigmoid = 1 / (1 + e^-x)
+	/*	Step:
+			1, if x > 0
+			0, otherwise
+		Sigmoid:
+			1 / (1 + e^-x)	*/
+	// [TODO] Decide if we want TransferFunctions to belong to Neuron, or to a dedicated ANN math library
+	enum TransferFunction{Step, Sigmoid};
 
     Neuron();
     virtual ~Neuron();
 
-    bool add_input(Neuron*);
-    bool add_output(Neuron*);
+    bool addInput(Neuron*);
+    bool addOutput(Neuron*);
 
-	double Output;
-	double calc_Output(TransferFunction*);
+	double inputSum();
+	double output(TransferFunction);
 
 	string tag = generateTag(3);
 	string descriptor();
 
 private:
-	double InputSum;
-
 	friend ostream& operator<<(ostream&, Neuron&);
 
 	vector<Neuron*> inputs, outputs;	// We want to add by pointer so that they are not copied on the stack
