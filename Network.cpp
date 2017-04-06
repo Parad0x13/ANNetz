@@ -1,9 +1,8 @@
 #include "headers.h"
 
-Network::Network(int[]* neuronsPerLayer) {
-	neur
-	Neurons = new Neuron[neuronsPerLayer.Length][];
-	for (auto i = 0; i < neuronsPerLayer.Lentgh; i++) {
+Network::Network(vector<int> neuronsPerLayer) {
+	Neurons = new neuronsPerLayer.size();
+	for (auto i = 0; i < neuronsPerLayer.size(); i++) {
 		Neurons[i] = new Neuron[neuronsPerLayer];
 	}
 }

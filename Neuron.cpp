@@ -10,7 +10,7 @@ Neuron::~Neuron() {
 
 bool Neuron::addInput(Neuron* n) {
 	inputs.push_back(n);
-
+	
 	return true;
 }
 

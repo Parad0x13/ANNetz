@@ -4,17 +4,16 @@
 #include "headers.h"
 
 class Network {
-public:
-	Neuron Neurons;
-	double[] Input, Output;
+public:	
+	double[] input, output;
 
-	Network(int[]);
+	Network(vector<int>);
 	virtual ~Network();
 
 	double calc_Out(int[] * );
 	
 private:
-	
+	vector<vector<Neuron>> neurons;
 };
 
 #endif
