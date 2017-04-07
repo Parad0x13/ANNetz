@@ -14,7 +14,7 @@ Network::Network(vector<int> neuronsPerLayer) {
 	int layerCount = neuronsPerLayer.size();
 
 	// Create all the Neurons in the network
-	for (auto d = 0;d < layerCount;d++) {
+	for (int d = 0;d < layerCount;d++) {
 		vector<Neuron*> layer;
 		int layerSize = neuronsPerLayer[d];
 
@@ -26,11 +26,12 @@ Network::Network(vector<int> neuronsPerLayer) {
 		layers.push_back(layer);
 	}
 
-	for (auto d = 1;d < layerCount;d++) {
+	// Interconect all Neurons to their next layer
+	for (int d = 1;d < layerCount;d++) {
 		int inputLayerSize = neuronsPerLayer[d - 1];
 		int outputLayerSize = neuronsPerLayer[d];
-		for (auto inputIndex = 0;inputIndex < inputLayerSize;inputIndex++) {
-			for (auto outputIndex = 0;outputIndex < outputLayerSize;outputIndex++) {
+		for (int inputIndex = 0;inputIndex < inputLayerSize;inputIndex++) {
+			for (int outputIndex = 0;outputIndex < outputLayerSize;outputIndex++) {
 				Neuron* input = layers[d - 1][inputIndex];
 				Neuron* output = layers[d][outputIndex];
 				Connection* connection = new Connection(input, output);
