@@ -1,4 +1,7 @@
-#include "headers.h"
+#include <sstream>
+#include "Neuron.h"
+
+using namespace std;
 
 Neuron::Neuron() {
 	//
@@ -8,29 +11,11 @@ Neuron::~Neuron() {
 	// Neural connections will be managed on the stack (possibly), they will need to be managed here
 }
 
-bool Neuron::addInput(Neuron* n) {
-	inputs.push_back(n);
-	
-	return true;
-}
-
-bool Neuron::addOutput(Neuron* n) {
-	outputs.push_back(n);
-
-	return true;
-}
-
 // [TODO] Improve this algorithm using memoization
 // [TODO] Don't only use Step TransferFunction
+// [TODO] Implement request to network and iteration of network's reported connections
 double Neuron::inputSum() {
-	double retVal = 0;
-
-	for (auto ptr : inputs) {
-		Neuron &input = *ptr;
-		retVal += input.output(Step);
-	}
-
-	return retVal;
+	return 0;
 }
 
 // [TODO] Improve this algorithm using memoization
@@ -64,18 +49,6 @@ string Neuron::descriptor() {
 
 ostream& operator<<(ostream& stream, Neuron& n) {
 	stream << n.descriptor();
-
-	stream << "\n\tInputs\n";
-	for(auto ptr : n.inputs) {
-		Neuron &input = *ptr;
-		stream << "\t" << input.descriptor() << endl;
-	}
-
-	stream << "\tOutputs\n";
-	for(auto ptr : n.outputs) {
-		Neuron &output = *ptr;
-		stream << "\t" << output.descriptor() << endl;
-	}
 
 	return stream;
 };

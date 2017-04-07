@@ -1,7 +1,9 @@
 #ifndef NEURON_H
 #define NEURON_H
 
-#include "headers.h"
+#include "Utility.h"
+
+class Network;
 
 class Neuron {
 public:
@@ -14,23 +16,18 @@ public:
 	enum TransferFunction{Step, Sigmoid};
 
     Neuron();
-    virtual ~Neuron();
-
-    bool addInput(Neuron*);
-    bool addOutput(Neuron*);
+    ~Neuron();
 
 	double inputSum();
 	double output(TransferFunction);
 
-	string tag = generateTag(3);
-	string descriptor();
+	std::string tag = generateTag(3);
+	std::string descriptor();
+
+	Network *network = NULL;
 
 private:
-	double[] Weights;
-
-	friend ostream& operator<<(ostream&, Neuron&);
-
-	vector<Neuron*> inputs, outputs;	// We want to add by pointer so that they are not copied on the stack
+	friend std::ostream& operator<<(std::ostream&, Neuron&);
 };
 
 #endif
