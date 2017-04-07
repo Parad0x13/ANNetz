@@ -1,0 +1,29 @@
+﻿  stdafx.cpp
+  Utility.cpp
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\utility.cpp(1): warning C4627: '#include <chrono>': skipped when looking for precompiled header use
+  c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\utility.cpp(1): note: Add directive to 'stdafx.h' or rebuild precompiled header
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\utility.cpp(2): warning C4627: '#include "Utility.h"': skipped when looking for precompiled header use
+  c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\utility.cpp(2): note: Add directive to 'stdafx.h' or rebuild precompiled header
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\utility.cpp(19): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  Neuron.cpp
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\neuron.cpp(1): warning C4627: '#include <sstream>': skipped when looking for precompiled header use
+  c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\neuron.cpp(1): note: Add directive to 'stdafx.h' or rebuild precompiled header
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\neuron.cpp(2): warning C4627: '#include "Neuron.h"': skipped when looking for precompiled header use
+  c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\neuron.cpp(2): note: Add directive to 'stdafx.h' or rebuild precompiled header
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\neuron.cpp(56): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  Network.cpp
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\network.cpp(1): warning C4627: '#include <iostream>': skipped when looking for precompiled header use
+  c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\network.cpp(1): note: Add directive to 'stdafx.h' or rebuild precompiled header
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\network.cpp(2): warning C4627: '#include "Network.h"': skipped when looking for precompiled header use
+  c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\network.cpp(2): note: Add directive to 'stdafx.h' or rebuild precompiled header
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\network.cpp(3): warning C4627: '#include "Neuron.h"': skipped when looking for precompiled header use
+  c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\network.cpp(3): note: Add directive to 'stdafx.h' or rebuild precompiled header
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\network.cpp(4): warning C4627: '#include "Connection.h"': skipped when looking for precompiled header use
+  c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\network.cpp(4): note: Add directive to 'stdafx.h' or rebuild precompiled header
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\network.cpp(72): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  Connection.cpp
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\connection.cpp(1): warning C4627: '#include "Connection.h"': skipped when looking for precompiled header use
+  c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\connection.cpp(1): note: Add directive to 'stdafx.h' or rebuild precompiled header
+c:\users\martin\documents\visual studio 2015\projects\annetz\annetz\connection.cpp(20): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  ANNetz.cpp
+  Generating Code...
