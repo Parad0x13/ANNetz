@@ -15,7 +15,8 @@ Neuron::~Neuron() {
 // [TODO] Don't only use Step TransferFunction
 // [TODO] Implement request to network and iteration of network's reported connections
 double Neuron::inputSum() {
-	return 0;
+	double retVal;
+	for (int index = 0; index < )
 }
 
 // [TODO] Improve this algorithm using memoization

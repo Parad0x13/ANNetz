@@ -50,6 +50,15 @@ void Network::addConnection(Connection* connection) {
 	// [TODO] Update memoization stuff here
 	connections.push_back(connection);
 }
+std::vector<Connection> Network::getConnections(Neuron neuron*)
+{
+	vector<Connection> retValue;
+	for (int index = 0; index < connections.size(); index++) {
+		if (connections[index].b == neuron*) {
+			
+		}
+	}
+}
 
 ostream& operator<<(ostream& stream, Network& n) {
 	stream << "Network " << &n << ":" << endl;
