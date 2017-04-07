@@ -16,7 +16,7 @@ private:
 	friend std::ostream& operator<<(std::ostream&, Network&);
 
 	void addConnection(Connection*);
-	std::vector<Connection> getConnections(Neuron*);
+	std::vector<Connection*> getConnections(Neuron*);
 	//void removeConnection(Connection*);
 
 public:

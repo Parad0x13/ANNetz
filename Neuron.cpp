@@ -16,7 +16,8 @@ Neuron::~Neuron() {
 // [TODO] Implement request to network and iteration of network's reported connections
 double Neuron::inputSum() {
 	double retVal;
-	for (int index = 0; index < )
+
+	return retVal;
 }
 
 // [TODO] Improve this algorithm using memoization
