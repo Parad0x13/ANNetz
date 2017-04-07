@@ -23,7 +23,7 @@ public:
 	// [TODO] In the future we should allow more complicated networks other than layer by layer
 	//			Possibly get rid of vector<vector<Neuron*>> in favor of connections only?
 	//			Maybe we could abstract vector<vector<Neuron*>> into a Structure class instead...
-	vector<double> calcOut(vector<double>);
+	std::vector<double> calcOut(std::vector<double>);
 	std::vector<std::vector<Neuron*>> layers;
 	std::vector<Connection*> connections;
 };

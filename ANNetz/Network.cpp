@@ -64,9 +64,7 @@ vector<Connection*> Network::getConnections(Neuron* neuron) {
 	return retVal;
 }
 
-
-vector<double> Network::calcOut(vector<double> _input)
-{
+vector<double> Network::calcOut(vector<double> _input) {
 	//weird error
 	vector<double> retVal;
 
