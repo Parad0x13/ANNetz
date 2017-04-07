@@ -15,19 +15,20 @@ public:
 	// [TODO] Decide if we want TransferFunctions to belong to Neuron, or to a dedicated ANN math library
 	enum TransferFunction{Step, Sigmoid};
 
-    Neuron(Network*);
+	Neuron(Network*, TransferFunction);
     ~Neuron();
-
-	double inputSum();
-	double output(TransferFunction);
+	
+	double output();
 
 	std::string tag = generateTag(3);
 	std::string descriptor();
 
-	Network *network = NULL;
+	Network* network = NULL;
 
 private:
 	friend std::ostream& operator<<(std::ostream&, Neuron&);
+	TransferFunction tFunc;
+	double inputSum();
 };
 
 #endif

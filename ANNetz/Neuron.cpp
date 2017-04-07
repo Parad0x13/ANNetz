@@ -3,8 +3,9 @@
 
 using namespace std;
 
-Neuron::Neuron(Network* _network) {
-	network = _network;
+Neuron::Neuron(Network* _network, Neuron::TransferFunction tf) {
+	
+	network = _network; tFunc = tf;
 }
 
 Neuron::~Neuron() {
@@ -21,10 +22,10 @@ double Neuron::inputSum() {
 }
 
 // [TODO] Improve this algorithm using memoization
-double Neuron::output(TransferFunction tf) {
+double Neuron::output() {
 	double retVal = 0;
 
-	switch (tf) {
+	switch (tFunc) {
 	case Step:
 		return 1;
 		if (inputSum() > 0) {

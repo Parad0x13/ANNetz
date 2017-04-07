@@ -14,6 +14,8 @@ public:
 	Neuron* b;
 	double weight;
 
+	void setRandomWeights();
+
 private:
 	friend std::ostream& operator<<(std::ostream&, Connection&);
 };
