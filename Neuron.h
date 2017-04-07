@@ -15,7 +15,7 @@ public:
 	// [TODO] Decide if we want TransferFunctions to belong to Neuron, or to a dedicated ANN math library
 	enum TransferFunction{Step, Sigmoid};
 
-    Neuron();
+    Neuron(Network*);
     ~Neuron();
 
 	double inputSum();

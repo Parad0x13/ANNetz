@@ -3,8 +3,8 @@
 
 using namespace std;
 
-Neuron::Neuron() {
-	//
+Neuron::Neuron(Network* _network) {
+	network = _network;
 }
 
 Neuron::~Neuron() {

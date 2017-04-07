@@ -19,7 +19,7 @@ Network::Network(vector<int> neuronsPerLayer) {
 		int layerSize = neuronsPerLayer[d];
 
 		for(int dd = 0;dd < layerSize;dd++) {
-			Neuron *neuron = new Neuron();
+			Neuron *neuron = new Neuron(this);
 			layer.push_back(neuron);
 		}
 
