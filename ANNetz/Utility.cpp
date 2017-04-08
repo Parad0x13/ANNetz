@@ -1,7 +1,6 @@
 #include <chrono>
 #include "Utility.h"
 
-
 using namespace std;
 
 // It's important to seed our random generator w/ system clock. Perfectly uniform distribution is achieved here.
@@ -17,7 +16,8 @@ string generateTag(int len, string available) {
 
 	return retVal;
 }
-double normalDitributedDouble() {
+
+double normalDistribution() {
 	uniform_real_distribution<double> distribution(0, 1);
 	double u1 = distribution(random_engine);
 	double u2 = distribution(random_engine);

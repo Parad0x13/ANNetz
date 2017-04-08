@@ -11,8 +11,8 @@ int main() {
 
 	int age;
 	cout << "Put in a Number pls ";
-		cin >> age;
-		cout << "you just typed " << age << "\ntype another number to exit ";
-		cin >> age;
-		cout << "See you later Alligator";
+	cin >> age;
+	cout << "you just typed " << age << "\ntype another number to exit ";
+	cin >> age;
+	cout << "See you later Alligator";
 }

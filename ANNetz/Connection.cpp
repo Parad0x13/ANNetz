@@ -9,9 +9,8 @@ Connection::Connection(Neuron* _a, Neuron* _b, double _weight) {
 	weight = _weight;
 }
 
-void Connection::setRandomWeights()
-{
-	weight = normalDitributedDouble();
+void Connection::setRandomWeights() {
+	weight = normalDistribution();
 }
 
 ostream& operator<<(ostream& stream, Connection& c) {

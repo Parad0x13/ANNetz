@@ -17,7 +17,7 @@ public:
 
 	Neuron(Network*, TransferFunction);
     ~Neuron();
-	
+
 	double output();
 
 	std::string tag = generateTag(3);
@@ -27,7 +27,7 @@ public:
 
 private:
 	friend std::ostream& operator<<(std::ostream&, Neuron&);
-	TransferFunction tFunc;
+	TransferFunction transferFunction;
 	double inputSum();
 };
 
