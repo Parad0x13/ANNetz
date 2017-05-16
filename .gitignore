@@ -1,5 +1,3 @@
 *.exe
-
-.vs/
-ipch/
-**x64/
+build/
+Win32/
