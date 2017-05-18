@@ -52,6 +52,5 @@ string Neuron::descriptor() {
 
 ostream& operator<<(ostream& stream, Neuron& n) {
 	stream << n.descriptor();
-
 	return stream;
 };
