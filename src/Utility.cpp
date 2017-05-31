@@ -17,11 +17,12 @@ string generateRandomTag(int len, string available) {
 	return retVal;
 }
 
-int currentTagIndex;
+int currentTagIndex = -1;
 std::string generateTag(int len, string available)
 {
-	return GetTag(currentTagIndex, len);
 	currentTagIndex++;
+	return GetTag(currentTagIndex, len);
+	
 }
 
 std::string GetTag(int index, int len, string available)

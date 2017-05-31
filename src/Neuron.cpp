@@ -1,11 +1,23 @@
 #include <sstream>
 #include "Neuron.h"
+#include "Network.h"
+#include "Utility.h"
 
 using namespace std;
 
-Neuron::Neuron(Network* _network, Neuron::TransferFunction _transferFunction) {
+Neuron::Neuron(Network* _network, int _layer, int _index) {
 	network = _network;
-	transferFunction = _transferFunction;
+	layer = _layer;
+	index = _index;
+
+	if (layer == 0) { //no "syntactical sugar"
+		weights = vector<double>(network->Layers[_layer].size());
+	}
+	else {
+		weights = vector<double>(network->Layers[_layer - 1].size());
+	}
+
+	SetRandomWeights();
 }
 
 Neuron::~Neuron() {
@@ -17,7 +29,6 @@ Neuron::~Neuron() {
 // [TODO] Implement request to network and iteration of network's reported connections
 double Neuron::inputSum() {
 	double retVal = 0;
-
 	return retVal;
 }
 
@@ -25,23 +36,18 @@ double Neuron::inputSum() {
 double Neuron::output() {
 	double retVal = 0;
 
-	switch (transferFunction) {
-	case Step:
-		return 1;
-		if (inputSum() > 0) {
-			retVal = 1;
-		}
-		else {
-			retVal = 0;
-		}
-		break;
-	case Sigmoid:
-		return 2;
-		retVal = 1 / (1 + exp(-inputSum()));
-		break;
-	}
+	retVal = 1 / (1 + exp(-inputSum()));
 
 	return retVal;
+}
+
+void Neuron::SetRandomWeights()
+{
+	
+	int count = weights.size();
+	for (int i = 0; i < count; i++) {
+		weights[i] = normalDistribution();
+	}
 }
 
 string Neuron::descriptor() {

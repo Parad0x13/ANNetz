@@ -1,5 +1,7 @@
 #include "Connection.h"
 #include "Utility.h"
+#include "Neuron.h"
+#include <string>
 
 using namespace std;
 
@@ -18,7 +20,7 @@ ostream& operator<<(ostream& stream, Connection& c) {
 
 	// [TODO] Add error checking for NULL connections
 
-	stream << c.a << " -> " << c.b->tag << " = " << c.weight;
+	stream << c.a->tag << " -> " << c.b->tag << " = " << c.weight;
 
 	return stream;
 };
