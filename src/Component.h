@@ -6,8 +6,7 @@ class Component {
 public:
 	Component() {};
 	std::vector<double> output;
-	std::vector<double*> input;
-	virtual void calcOut() = 0;
+	virtual void calcOut(std::vector<double*>) = 0;
 };
 
 #endif

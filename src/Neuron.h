@@ -10,20 +10,30 @@ public:
 	Neuron(Network*, int, int);
     ~Neuron();
 
-	double output();
-	void setRandomWeights();
-
 	std::string tag = generateTag(3);
 	std::string descriptor();
 	Network* network = NULL;
+
+	double output();
+	double setOutput(double);
+	
+	double lastOutput;
+	double error;
+	std::vector<double> weights;
+
+	void setRandomWeights();
+	void adjustWeights(double, double);
+	void calcError(double);
 
 private:
 	friend std::ostream& operator<<(std::ostream&, Neuron&);
 	int layer, index;
 
 	double inputSum();
-	std::vector<double> weights;
-	double lastOutput;
+		
+	std::vector<double> previousWeightDelta;
+	double bias;
+	double previousBiasDelta;
 };
 
 #endif
