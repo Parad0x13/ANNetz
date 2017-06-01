@@ -10,14 +10,10 @@ Neuron::Neuron(Network* _network, int _layer, int _index) {
 	layer = _layer;
 	index = _index;
 
-	if (layer == 0) { //no "syntactical sugar"
-		weights = vector<double>(network->Layers[_layer].size());
-	}
-	else {
-		weights = vector<double>(network->Layers[_layer - 1].size());
-	}
+	if(layer == 0)weights = vector<double>(network->layers[_layer - 0].size());
+	else          weights = vector<double>(network->layers[_layer - 1].size());
 
-	SetRandomWeights();
+	setRandomWeights();
 }
 
 Neuron::~Neuron() {
@@ -41,7 +37,7 @@ double Neuron::output() {
 	return retVal;
 }
 
-void Neuron::SetRandomWeights()
+void Neuron::setRandomWeights()
 {
 	
 	int count = weights.size();

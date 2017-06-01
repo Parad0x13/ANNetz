@@ -11,7 +11,7 @@ public:
     ~Neuron();
 
 	double output();
-	void SetRandomWeights();
+	void setRandomWeights();
 
 	std::string tag = generateTag(3);
 	std::string descriptor();

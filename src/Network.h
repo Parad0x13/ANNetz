@@ -8,22 +8,23 @@
 class Neuron;
 class Connection;
 
-class Network : public Component{
+class Network : public Component {
 public:
 	Network();					// Default blank network
 	Network(std::vector<int>);	// Standard layer by layer network
 	~Network();
 
-private:
-	friend std::ostream& operator<<(std::ostream&, Network&);
+	void calcOut();
 
-public:
 	// [TODO] In the future we should allow more complicated networks other than layer by layer
 	//			Possibly get rid of vector<vector<Neuron*>> in favor of connections only?
 	//			Maybe we could abstract vector<vector<Neuron*>> into a Structure class instead...
-	std::string GetInfo();
-	
-	std::vector<std::vector<Neuron*>> Layers;
+	std::string getInfo();
+
+	std::vector<std::vector<Neuron*>> layers;
+
+private:
+	friend std::ostream& operator<<(std::ostream&, Network&);
 };
 
 #endif

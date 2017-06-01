@@ -14,16 +14,16 @@ Network::Network() {
 // In this network approach we fully interconnect Neurons in a layer by layer approach
 Network::Network(vector<int> neuronsPerLayer) {
 	int layerCount = neuronsPerLayer.size();
-	Layers = vector<vector<Neuron*>>(layerCount);
+	layers = vector<vector<Neuron*>>(layerCount);
 
 	// Create all the Neurons in the network
 	for (int d = 0; d < layerCount; d++) {
 		int layerSize = neuronsPerLayer[d];
-		Layers[d] = vector<Neuron*>(layerSize);
+		layers[d] = vector<Neuron*>(layerSize);
 		
 		for (int dd = 0; dd < layerSize; dd++) {
 			Neuron *neuron = new Neuron(this, d, dd);
-			Layers[d][dd] = neuron;
+			layers[d][dd] = neuron;
 		}
 	}
 
@@ -34,16 +34,15 @@ Network::~Network() {
 	//
 }
 
-std::string Network::GetInfo()
-{
+std::string Network::getInfo() {
 	string s = "Layers: ";
-	for (int i = 0; i < Layers.size(); i++) {
-		s.append(std::to_string(Layers[i].size()) + " ");
+	for (int i = 0; i < layers.size(); i++) {
+		s.append(std::to_string(layers[i].size()) + " ");
 	}
 	return s;
 }
 
-void Component::CalcOut() {
+void Network::calcOut() {
 //	vector<double> retVal;
 //
 //	// [TODO] Set inpput into the first layer
@@ -56,8 +55,7 @@ void Component::CalcOut() {
 //	}
 }
 
-
 ostream& operator<<(ostream& stream, Network& n) {
-	stream << "Network " << &n << " " << n.GetInfo() << endl;
+	stream << "Network " << &n << " " << n.getInfo() << endl;
 	return stream;
 };
