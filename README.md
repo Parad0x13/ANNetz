@@ -22,21 +22,17 @@ GCC + GDB
 [Dia portable](http://portableapps.com/apps/office/dia_portable)
 
 ## Syntax
-```C++
 // Inline opening scope brackets
 someFunction() {
 	...
 }
-```
 
-```C++
 // Tabs for indentation, spaces for alignment
 vector<std::string> pokemon {
 	"Bulbasaur",  "Ivysaur",    "Venusaur",
 	"Charmander", "Charmeleon", "Charizard",
 	"Squirtle",   "Wartortle",  "Blastoise"
 };
-```
 
 **No** trailing whitespace
 
