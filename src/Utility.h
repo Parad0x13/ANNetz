@@ -10,4 +10,5 @@ std::string generateTag(int, std::string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 std::string GetTag(int, int, std::string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 double normalDistribution();
+int getRandomInt(int, int);
 #endif

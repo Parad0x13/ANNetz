@@ -10,8 +10,14 @@ Neuron::Neuron(Network* _network, int _layer, int _index) {
 	layer = _layer;
 	index = _index;
 
-	if (layer == 0)weights = vector<double>(network->layers[_layer - 0].size());
-	else          weights = vector<double>(network->layers[_layer - 1].size());
+	if (layer == 0) {
+		weights = vector<double>(network->layers[_layer - 0].size()); 
+		previousWeightDelta = vector<double>(network->layers[_layer - 0].size());
+	}
+	else {
+		weights = vector<double>(network->layers[_layer - 1].size()); 
+		previousWeightDelta = weights = vector<double>(network->layers[_layer - 1].size());
+	}
 
 	setRandomWeights();
 }
@@ -42,7 +48,7 @@ double Neuron::output() {
 
 double Neuron::setOutput(double value)
 {
-	lastOutput = 1 / (1 + exp(-value));
+	lastOutput = value;
 	return lastOutput;
 }
 
@@ -54,13 +60,14 @@ void Neuron::setRandomWeights()
 		weights[i] = normalDistribution();
 	}
 	bias = normalDistribution();
+	previousBiasDelta = 0;
 }
 
 void Neuron::adjustWeights(double lernRate, double momentum)
 {
 	double bufferDelta;
 	for (int j = 0; j < weights.size(); j++){
-		bufferDelta = error * network->layers[layer - 1][j]->lastOutput * lernRate + momentum * previousWeightDelta[j];
+		bufferDelta = error * network->layers[layer - 1][j]->lastOutput * lernRate +momentum * previousWeightDelta[j];
 		weights[j] += bufferDelta;
 		previousWeightDelta[j] = bufferDelta;
 	}

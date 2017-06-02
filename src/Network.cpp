@@ -5,6 +5,7 @@
 #include "Neuron.h"
 #include "Connection.h"
 #include "Component.h"
+#include "Utility.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ Network::Network(vector<int> neuronsPerLayer) {
 	int layerCount = neuronsPerLayer.size();
 	inputSize = neuronsPerLayer[0];
 	outputSize = neuronsPerLayer[layerCount - 1];
+	output = vector<double>(outputSize);
 
 	layers = vector<vector<Neuron*>>(layerCount);
 	lastError = vector<double>(outputSize);
@@ -46,7 +48,21 @@ std::string Network::getInfo() {
 	return s;
 }
 
-void Network::train(std::vector<double*> _input, std::vector<double> target, double lernRate, double momentum)
+double Network::AbsoluteError(std::vector<std::vector<double>> inputs, std::vector<std::vector<double>> targets)
+{
+	double retVal = 0;
+
+	for (int i = 0; i < inputs.size(); i++) {
+		backpropagate(inputs[i], targets[i], 0, 0);
+		for (int j = 0; j < outputSize; j++) {
+			retVal += abs(layers[layers.size() - 1][j]->error);
+		}
+	}
+	
+	return retVal;
+}
+
+void Network::backpropagate(std::vector<double> _input, std::vector<double> target, double lernRate, double momentum)
 {
 	if (_input.size() != inputSize) throw new exception("Invalid input length");
 	if (target.size() != outputSize) throw new exception("Invalid target length");
@@ -59,27 +75,29 @@ void Network::train(std::vector<double*> _input, std::vector<double> target, dou
 		layers[layers.size() - 1][j]->calcError(lastError[j]);
 		layers[layers.size() - 1][j]->adjustWeights(lernRate, momentum);
 	}
-
-	for (int i = layers.size() - 2; i > 0; i--)
-	{
-		for (int j = 0; j < layers[i].size(); j++)
+	if (lernRate != 0) {
+		for (int i = layers.size() - 2; i > 0; i--)
 		{
-			double bError = 0;
-			for (int k = 0; k < layers[i + 1].size(); k++)
+			for (int j = 0; j < layers[i].size(); j++)
 			{
-				bError += layers[i + 1][k]->error * layers[i + 1][k]->weights[j];//maybe durschnitt
-			}
+				double bError = 0;
+				for (int k = 0; k < layers[i + 1].size(); k++)
+				{
+					bError += layers[i + 1][k]->error * layers[i + 1][k]->weights[j];//maybe durschnitt
+				}
 
-			layers[i][j]->calcError(bError);
-			layers[i][j]->adjustWeights(lernRate, momentum);
+				layers[i][j]->calcError(bError);
+				layers[i][j]->adjustWeights(lernRate, momentum);
+			}
 		}
 	}
+
 }
-void Network::calcOut(std::vector<double*> input) {
+void Network::calcOut(std::vector<double> input) {
 	if (input.size() != inputSize) throw new exception("Invalid Input length");
 
 	for (int j = 0; j < inputSize; j++) {
-		layers[0][j]->setOutput(*input[j]);
+		layers[0][j]->setOutput(input[j]);
 	}
 	for (int i = 1; i < layers.size(); i++) {
 		for (int j = 0; j < layers[i].size(); j++) {
@@ -93,6 +111,19 @@ void Network::calcOut(std::vector<double*> input) {
 	}
 }
 
+double Network::trainOn(std::vector<std::vector<double>> inputs, std::vector<std::vector<double>> targets,  int iterations)
+{
+	// [TODO] Do some cuda stuff over here
+	int rnd;
+	for (int i = 0; i < iterations; i++) {
+		rnd = getRandomInt(0, inputs.size() - 1);
+
+		backpropagate(inputs[rnd], targets[rnd], 0.2, 0.1);
+		if (i % 100 == 0) cout << "Itaration " << i << "\t Absolut Error = " << AbsoluteError(inputs, targets) << endl;
+	}
+
+	return AbsoluteError(inputs, targets);
+}
 
 ostream& operator<<(ostream& stream, Network& n) {
 	stream << "Network " << &n << " " << n.getInfo() << endl;

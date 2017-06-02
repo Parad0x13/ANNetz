@@ -50,3 +50,8 @@ double normalDistribution() {
 
 	return sqrt(-2 * log(u1)) * cos(2 * 3.141592 * u2);
 }
+
+int getRandomInt(int _inclusiveLowerLimit, int inclusiveUpperLimit) {
+	uniform_int_distribution<int> distribution(_inclusiveLowerLimit, inclusiveUpperLimit);
+	return distribution(random_engine);
+}
