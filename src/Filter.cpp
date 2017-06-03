@@ -31,16 +31,7 @@ void Filter::calcOut(std::vector<double> input)
 			//sum up featureFrame at this position
 			for (int fx = 0; fx < featureX; fx++) {
 				for (int fy = 0; fy < featureX; fy++) {
-					//useless with when you want values to be 0
-					//buffer += input[x + fx + (y + fy) * inX] * feature[fx + fy * featureX];
-
-					//linear function f(error) = 1 - abs(error) -> highest match gives 1 and then linear down to 0;
-					//buffer += 1 - abs(input[x + fx + (y + fy) * inX] - feature[fx + fy * featureX]);
-					
-					//elliptical function with f(error) = 1 - sqrt(1 + (error - 1)^2) highest match gives 1 and then it goes down sharply ending in 0
-					//buffer += 1 - sqrt(1 + (input[x + fx + (y + fy) * inX] - feature[fx + fy * featureX] - 1) *(input[x + fx + (y + fy) * inX] - feature[fx + fy * featureX] - 1));
-
-					//
+					buffer += calcTF(input[x + fx + (y + fy) * inX] - feature[fx + fy * featureX]);
 				}
 			}
 
