@@ -25,7 +25,7 @@ void Pooling::calcOut(std::vector<double> input)
 				if (fx + x < inX) {
 					for (int fy = 0; fy < 2; fy++) {
 						if (fy + y < inY) {
-							buffer = fmax(input[x + fx + (y + fy) * inX], buffer);
+							buffer = fmax(input[x * 2 + fx + (y * 2 + fy) * inX], buffer);
 						}					
 					}
 				}
