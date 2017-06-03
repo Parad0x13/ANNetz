@@ -6,7 +6,6 @@
 #include "Component.h"
 
 
-
 class Filter : public Component
 {
 public:

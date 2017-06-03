@@ -1,15 +1,13 @@
 #include "Filter.h"
 #include <math.h>
 
-using namespace std;
-
 Filter::Filter(TransferFunction _tf, std::vector<double> _feature, int _inX, int _inY, int fx, int fy)
 {
 	TF = _tf;
 	featureX = fx; featureY = fy;
 	feature = _feature;
 
-	if (feature.size() != featureX * featureY) throw new exception("FeatureSize dont match frameSize");
+	if (feature.size() != featureX * featureY) throw new std::exception("FeatureSize dont match frameSize");
 
 	refreshInputSize(_inX, _inY);
 }
@@ -43,10 +41,10 @@ void Filter::calcOut(std::vector<double> input)
 void Filter::refreshInputSize(int _inX, int _inY)
 {
 	inX = _inX, inY = _inY;
-	if (featureX > inX || featureY > inY) throw new exception("FeatureSize is bigger then the InputSize");
+	if (featureX > inX || featureY > inY) throw new std::exception("FeatureSize is bigger then the InputSize");
 	outX = inX - featureX + 1;
 	outY = inY - featureY + 1;
-	output = vector<double>(outX * outY);
+	output = std::vector<double>(outX * outY);
 }
 
 double Filter::calcTF(double x)
