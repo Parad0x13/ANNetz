@@ -1,26 +1,22 @@
 #include "Pooling.h"
 #include <math.h>
 
-
-
-Pooling::Pooling(int _inX, int _inY)
-{
+Pooling::Pooling(int _inX, int _inY) {
 	refreshInputSize(_inX, _inY);
 }
 
-Pooling::~Pooling()
-{
+Pooling::~Pooling() {
+	//
 }
 
-void Pooling::calcOut(std::vector<double> input)
-{
+void Pooling::calcOut(std::vector<double> input) {
 	double buffer;
-	//moving feature frame
+	// Moving feature frame
 	for (int x = 0; x < outX; x++) {
 		for (int y = 0; y < outY; y++) {
 			buffer = 0;
 
-			//sum up featureFrame at this position
+			// Sum up featureFrame at this position
 			for (int fx = 0; fx < 2; fx++) {
 				if (fx + x < inX) {
 					for (int fy = 0; fy < 2; fy++) {
@@ -36,9 +32,9 @@ void Pooling::calcOut(std::vector<double> input)
 	}
 }
 
-void Pooling::refreshInputSize(int _inX, int _inY)
-{
-	inX = _inX; inY = _inY;
+void Pooling::refreshInputSize(int _inX, int _inY) {
+	inX = _inX;
+	inY = _inY;
 
 	outX = (inX + 1) / 2;
 	outY = (inY + 1) / 2;

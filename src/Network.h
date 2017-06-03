@@ -30,7 +30,6 @@ private:
 	void backpropagate(std::vector<double>, std::vector<double>, double, double);
 
 	std::vector<double> lastError;
-	
 };
 
 #endif

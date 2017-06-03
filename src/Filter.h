@@ -6,8 +6,7 @@
 #include "Component.h"
 
 
-class Filter : public Component
-{
+class Filter : public Component {
 public:
 	enum TransferFunction {
 		Linear, Eliptic, Exponential, Hyperbola
@@ -19,6 +18,7 @@ public:
 	TransferFunction TF;
 	void calcOut(std::vector<double>);
 	void refreshInputSize(int, int);
+
 private:
 	int inX, inY;
 	int outX, outY;

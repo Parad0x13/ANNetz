@@ -5,8 +5,7 @@
 #include <string>
 #include "Component.h"
 
-class Pooling : public Component
-{
+class Pooling : public Component {
 public:
 	void calcOut(std::vector<double>);
 	void refreshInputSize(int, int);
@@ -18,7 +17,5 @@ private:
 	int inX, inY;
 	int outX, outY;
 };
+
 #endif
-
-
-

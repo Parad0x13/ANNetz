@@ -5,11 +5,7 @@
 
 using namespace std;
 
-Neuron::Neuron(Network* _network, int _layer, int _index) {
-	network = _network;
-	layer = _layer;
-	index = _index;
-
+Neuron::Neuron(Network* _network, int _layer, int _index) : network(_network), layer(_layer), index(_index) {
 	if (layer == 0) {
 		weights = vector<double>(network->layers[_layer - 0].size()); 
 		previousWeightDelta = vector<double>(network->layers[_layer - 0].size());
@@ -41,46 +37,43 @@ double Neuron::inputSum() {
 
 // [TODO] Improve this algorithm using memoization
 double Neuron::output() {
-
 	lastOutput = 1 / (1 + exp(-inputSum()));
 	return lastOutput;
 }
 
-double Neuron::setOutput(double value)
-{
+double Neuron::setOutput(double value) {
 	lastOutput = value;
 	return lastOutput;
 }
 
-void Neuron::setRandomWeights()
-{
-
+void Neuron::setRandomWeights() {
 	int count = weights.size();
+
 	for (int i = 0; i < count; i++) {
 		weights[i] = normalDistribution();
 	}
+
 	bias = normalDistribution();
 	previousBiasDelta = 0;
 }
 
-void Neuron::adjustWeights(double lernRate, double momentum)
-{
+void Neuron::adjustWeights(double lernRate, double momentum) {
 	double bufferDelta;
-	for (int j = 0; j < weights.size(); j++){
+
+	for (int j = 0; j < weights.size(); j++) {
 		bufferDelta = error * network->layers[layer - 1][j]->lastOutput * lernRate +momentum * previousWeightDelta[j];
 		weights[j] += bufferDelta;
 		previousWeightDelta[j] = bufferDelta;
 	}
+
 	bufferDelta = error * lernRate + momentum * previousBiasDelta;
 	bias += bufferDelta;
 	previousBiasDelta = bufferDelta;
 }
 
-void Neuron::calcError(double absolutError)
-{
+void Neuron::calcError(double absolutError) {
 	error = lastOutput * (1 - lastOutput) * absolutError;
 }
-
 
 string Neuron::descriptor() {
 	stringstream ss;

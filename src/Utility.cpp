@@ -18,21 +18,19 @@ string generateRandomTag(int len, string available) {
 }
 
 int currentTagIndex = -1;
-std::string generateTag(int len, string available)
-{
+std::string generateTag(int len, string available) {
 	currentTagIndex++;
-	return GetTag(currentTagIndex, len);
-	
+	return getTag(currentTagIndex, len);
 }
 
-std::string GetTag(int index, int len, string available)
-{
+std::string getTag(int index, int len, string available) {
 	string ret = "";
-	int buffer = 0;
-	int basis;
+	int buffer = 0, basis;
+
 	if (index >= pow(available.length(), len)) {
 		return "Overflow";
 	}
+
 	for (int i = len - 1; i > -1; i--) {
 		basis = pow(available.length(), i);
 		buffer = index / basis;

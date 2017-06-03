@@ -32,8 +32,7 @@ private:
 	double inputSum();
 		
 	std::vector<double> previousWeightDelta;
-	double bias;
-	double previousBiasDelta;
+	double bias, previousBiasDelta;
 };
 
 #endif

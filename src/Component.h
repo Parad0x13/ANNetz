@@ -6,8 +6,7 @@ class Component {
 public:
 	Component() {};
 	std::vector<double> output;
-	//always put in values between 0 and 1;
-	virtual void calcOut(std::vector<double>) = 0;
+	virtual void calcOut(std::vector<double>) = 0;		// Implied [0, 1]
 };
 
 #endif
