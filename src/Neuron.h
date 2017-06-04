@@ -24,6 +24,7 @@ public:
 	void setRandomWeights();
 	void adjustWeights(double, double);
 	void calcError(double);
+	void changeARandomWeight();
 
 private:
 	friend std::ostream& operator<<(std::ostream&, Neuron&);

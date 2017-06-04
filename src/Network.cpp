@@ -110,18 +110,53 @@ void Network::calcOut(std::vector<double> input) {
 	}
 }
 
-double Network::trainOn(std::vector<std::vector<double>> inputs, std::vector<std::vector<double>> targets,  int iterations) {
+double Network::trainOn(std::vector<std::vector<double>> inputs, std::vector<std::vector<double>> targets, int iterations) {
 	// [TODO] Do some cuda stuff over here
 	int rnd;
+	double lernrate = 1 / (double)inputSize;
+	double bufferError = 0;
+	double currentError = 0;
+	double deviation = 0;
+	//[todo] give an maximum allowed error with the TrainOn call to decide whether this local minima is good or bad
 	for (int i = 0; i < iterations; i++) {
 		rnd = getRandomInt(0, inputs.size() - 1);
 
-		backpropagate(inputs[rnd], targets[rnd], 0.2, 0.1);
-		if (i % 100 == 0) cout << "Itaration " << i << "\t Absolut Error = " << AbsoluteError(inputs, targets) << endl;
+		backpropagate(inputs[rnd], targets[rnd], lernrate / (i / 1000 + 1), 0.1);
+		if (i % 100 == 0) {
+			currentError = AbsoluteError(inputs, targets);
+			deviation = fmax(bufferError, currentError) - fmin(bufferError, currentError);
+
+			if (bufferError == 0) bufferError = currentError;
+			cout << "Itaration: " << i << "  \tAbsolut Error = " << currentError << "  \tDeviation: " << deviation << endl;
+
+
+			if (i % 10000 == 0) {
+				//random change
+				if (deviation <= 0.0001) {
+					rnd = getRandomInt(1, layers.size() - 1);
+					layers[rnd][getRandomInt(0, layers[rnd].size() - 1)]->changeARandomWeight();
+					cout << "Did Random Weight Change" << endl;
+				}
+			}
+			else {
+				//jump
+				if (i % 1000 == 0) {
+					if (deviation <= 0.002) {
+						rnd = getRandomInt(0, inputs.size() - 1);
+						cout << "Did Jump" << endl;
+						backpropagate(inputs[rnd], targets[rnd], 2, 0);
+						i++;
+					}
+				}
+			}
+		}
+
+		bufferError = currentError;
 	}
 
 	return AbsoluteError(inputs, targets);
 }
+
 
 ostream& operator<<(ostream& stream, Network& n) {
 	stream << "Network " << &n << " " << n.getInfo() << endl;
