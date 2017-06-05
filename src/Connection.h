@@ -2,19 +2,14 @@
 #define CONNECTION_H
 
 #include <iostream>
-
-class Neuron;
+#include "Component.h"
 
 class Connection {
 public:
-	// [TODO] In the future allow connection to connect Networks as well as Neurons
-	Connection(Neuron*, Neuron*, double = 0);
-
-	Neuron* a;
-	Neuron* b;
-	double weight;
-
-	void setRandomWeights();
+	Connection();
+	Connection(int, Component*, Component*);
+	int vectorStart = 0;
+	Component *indexA, *indexB;
 
 private:
 	friend std::ostream& operator<<(std::ostream&, Connection&);

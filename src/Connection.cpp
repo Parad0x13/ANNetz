@@ -5,12 +5,10 @@
 
 using namespace std;
 
-Connection::Connection(Neuron* _a, Neuron* _b, double _weight) : a(_a), b(_b), weight(_weight) {
-	//
+Connection::Connection() {
 }
 
-void Connection::setRandomWeights() {
-	weight = normalDistribution();
+Connection::Connection(int start, Component *a, Component *b) : vectorStart(start), indexA(a), indexB(b) {
 }
 
 ostream& operator<<(ostream& stream, Connection& c) {
@@ -18,7 +16,6 @@ ostream& operator<<(ostream& stream, Connection& c) {
 
 	// [TODO] Add error checking for NULL connections
 
-	stream << c.a->tag << " -> " << c.b->tag << " = " << c.weight;
-
+	stream << c.indexA << " -> " << c.indexB << " offset: " << c.vectorStart;
 	return stream;
 };
