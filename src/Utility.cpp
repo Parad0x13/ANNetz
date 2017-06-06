@@ -53,3 +53,37 @@ int getRandomInt(int _inclusiveLowerLimit, int inclusiveUpperLimit) {
 	uniform_int_distribution<int> distribution(_inclusiveLowerLimit, inclusiveUpperLimit);
 	return distribution(random_engine);
 }
+std::vector<std::string> splitString(std::string s, char c) {
+	std::vector<string> elems;
+	std::stringstream ss(s);
+	std::string number;
+	while (std::getline(ss, number, c)) {
+		elems.push_back(number);
+	}
+
+	return elems;
+}
+
+std::vector<char> readFileBytes(std::string name) {
+	std::ifstream file(name);
+	std::ostringstream ss;
+	ss << file.rdbuf();
+	const std::string& s = ss.str();
+	std::vector<char> vec(s.begin(), s.end());
+
+	return vec;
+}
+std::string getHex(char c) {
+	string chars = "0123456789ABCDEF";
+	string str = "";
+	int val = (int)c;
+	if (val < 0) val = 256 + val;
+
+	int buffer;
+	buffer = val % 16;
+	str += chars[buffer];
+	val -= buffer * 16;
+	str += chars[val];
+
+	return str;
+}

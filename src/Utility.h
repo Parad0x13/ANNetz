@@ -2,6 +2,11 @@
 #define UTILITY_H
 
 #include <random>
+#include <string.h>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <fstream>
 
 extern std::default_random_engine random_engine;	// Nicely available for use throughout project
 
@@ -11,5 +16,7 @@ std::string getTag(int, int, std::string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 double normalDistribution();
 int getRandomInt(int, int);
-
+std::vector<std::string> splitString(std::string, char);
+std::vector<char> readFileBytes(std::string);
+std::string getHex(char);
 #endif

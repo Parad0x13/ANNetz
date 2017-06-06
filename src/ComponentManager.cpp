@@ -1,5 +1,6 @@
 #include "ComponentManager.h"
 
+
 using namespace std;
 ComponentManager::ComponentManager(int inSize, int outSize, int Length) : inputSize(inSize), OutputSize(outSize) {
 	components = vector<vector<Component*>>(Length);
@@ -63,3 +64,56 @@ void ComponentManager::setComponent(Component * com, int layer, int index) {
 
 	components[layer][index] = com;
 }
+
+void ComponentManager::getDataSet(std::string path) {
+	string line;
+	vector<string> outs;
+	//read IndexFile
+	ifstream myfile(path + "\\Index.txt");
+	if (myfile.is_open())
+	{
+		getline(myfile, line);
+		//[TODO] switch here the data types 
+		getline(myfile, line);
+		outs = splitString(line, ';');
+		myfile.close();
+	}
+	else cout << "Unable to open file";
+
+	targets = vector<vector<double*>>(outs.size());
+	inputs = vector<vector<double*>>(outs.size());
+	for (int i = 0; i < outs.size(); i++) {
+		targets[i] = vector<double*>(1); //change that later!
+		inputs[i] = vector<double*>(1);
+
+		targets[i][0] = new double(std::stod(outs[i]));
+	}
+	//read InputData
+	
+	for (int i = 0; i < outs.size(); i++) {
+		stringstream ss;
+		ss << i;
+		cout << i << ".bmp" << endl;
+		inputs[i] = BmToArray(path + "\\" + ss.str() + ".bmp");
+	}
+}
+
+std::vector<double*> ComponentManager::BmToArray(std::string path) {
+	vector<char> bytes = readFileBytes(path);
+	vector<double*> ret;
+	int offset = 54;
+	for (int i = offset; i < bytes.size(); i++) {
+		int val = (int)bytes[i];
+		if (val < 0) val = 256 + val;
+		ret.push_back( new double(1.0 / val));
+	}
+	for (int y = 3; y >= 0; y--) {
+		for (int x = 0; x < 4; x++) {
+			cout << "{" << getHex(bytes[offset + (x + 4 * y) * 3 + 0]) << "," << getHex(bytes[offset + (x + 4 * y) * 3 + 1]) << "," << getHex(bytes[offset + (x + 4 * y) * 3 + 2]) << "}";
+		}
+		cout << endl;
+	}
+	return ret;
+}
+
+

@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 	cout << "This will be difficult to read via text..." << endl;
 	cout << network << endl;
 
-	network.trainOn(inputs, outputs, 100000);
+	network.trainOn(inputs, outputs, 1000);
 
 	cout << "Finished" << endl;
 	for (int i = 0;i < 4;i++) {
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 		cout << *network.output[0] << endl;
 	}
 	
-	cout << "initalize cnn";
+	cout << "initalize cnn" << endl;
 	ComponentManager cm = ComponentManager(2, 1, 3); //insize, outsize, length
 	cm.setComponent(&network, 1, 0);
 
@@ -48,4 +48,5 @@ int main(int argc, char *argv[]) {
 		cout << *cm.calcOut(inputs[i])[0] << endl;
 	}
 
+	cm.getDataSet("C:\\Users\\Martin\\Desktop\\ANNetz\\AnnData"); //you need to change this if you want it to work on youre pc
 }
