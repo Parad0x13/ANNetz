@@ -9,7 +9,7 @@ Pooling::~Pooling() {
 	//
 }
 
-void Pooling::calcOut(std::vector<double> input) {
+void Pooling::calcOut() {
 	double buffer;
 	// Moving feature frame
 	for (int x = 0; x < outX; x++) {
@@ -21,13 +21,13 @@ void Pooling::calcOut(std::vector<double> input) {
 				if (fx + x < inX) {
 					for (int fy = 0; fy < 2; fy++) {
 						if (fy + y < inY) {
-							buffer = fmax(input[x * 2 + fx + (y * 2 + fy) * inX], buffer);
+							buffer = fmax(*input[x * 2 + fx + (y * 2 + fy) * inX], buffer);
 						}					
 					}
 				}
 			}
 
-			output[x + outX * y] = buffer;
+			output[x + outX * y] = new double(buffer);
 		}
 	}
 }
@@ -35,9 +35,12 @@ void Pooling::calcOut(std::vector<double> input) {
 void Pooling::refreshInputSize(int _inX, int _inY) {
 	inX = _inX;
 	inY = _inY;
+	inputSize = inX * inY;
 
 	outX = (inX + 1) / 2;
 	outY = (inY + 1) / 2;
 
-	output = std::vector<double>(outX * outY);
+	outputSize = outX * outY;
+	output = std::vector<double*>(outputSize);
+	input = std::vector<double*>(inputSize);
 }

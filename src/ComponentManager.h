@@ -16,17 +16,13 @@ public:
 	ComponentManager(int, int, int);
 	~ComponentManager();
 
-	std::vector<double> calcOut(std::vector<double>);
+	std::vector<double*> calcOut(std::vector<double*>);
+	void setComponent(Component*, int, int);
 private:
 	int inputSize, OutputSize;
 
 	std::vector<std::vector<Component*>> components;
-	std::vector<std::vector<Connection>> connections;
-
-	std::vector<PassThrough> ptVec;
-	std::vector<Network> ntVec;
-	std::vector<Pooling> poVec;
-	std::vector<Filter> fiVec;
+	std::vector<std::vector<Connection*>> connections;
 };
 
 #endif

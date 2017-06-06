@@ -7,7 +7,7 @@
 
 class Pooling : public Component {
 public:
-	void calcOut(std::vector<double>);
+	void calcOut();
 	void refreshInputSize(int, int);
 
 	Pooling(int, int);

@@ -11,6 +11,7 @@ public:
 	int vectorStart = 0;
 	Component *indexA, *indexB;
 
+	void setInput();
 private:
 	friend std::ostream& operator<<(std::ostream&, Connection&);
 };

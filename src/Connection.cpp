@@ -11,6 +11,10 @@ Connection::Connection() {
 Connection::Connection(int start, Component *a, Component *b) : vectorStart(start), indexA(a), indexB(b) {
 }
 
+void Connection::setInput() {
+	indexB->setInput(vectorStart, indexA->output);
+}
+
 ostream& operator<<(ostream& stream, Connection& c) {
 	stream << "Connection " << &c << ": ";
 

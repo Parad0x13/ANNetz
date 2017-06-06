@@ -1,26 +1,27 @@
 #include <iostream>
 #include "Network.h"
+#include "ComponentManager.h"
 #include <vector>
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	std::vector<::vector<double>> inputs = std::vector<std::vector<double>>(4);
-	std::vector<::vector<double>> outputs = std::vector<std::vector<double>>(4);
+	std::vector<::vector<double*>> inputs = std::vector<std::vector<double*>>(4);
+	std::vector<::vector<double*>> outputs = std::vector<std::vector<double*>>(4);
 
 	for (int i = 0;i < 4;i++) {
-		inputs[i] = vector<double>(2);
-		outputs[i] = vector<double>(1);
+		inputs[i] = vector<double*>(2);
+		outputs[i] = vector<double*>(1);
 	}
 
-	inputs[0][0] = 0; inputs[0][1] = 0;
-	inputs[1][0] = 0; inputs[1][1] = 1;
-	inputs[2][0] = 1; inputs[2][1] = 0;
-	inputs[3][0] = 1; inputs[3][1] = 1;
-	outputs[0][0] = 0;
-	outputs[1][0] = 1;
-	outputs[2][0] = 1;
-	outputs[3][0] = 0;
+	inputs[0][0] = new double(0); inputs[0][1] = new double(0);
+	inputs[1][0] = new double(0); inputs[1][1] = new double(1);
+	inputs[2][0] = new double(1); inputs[2][1] = new double(0);
+	inputs[3][0] = new double(1); inputs[3][1] = new double(1);
+	outputs[0][0] = new double(0);
+	outputs[1][0] = new double(1);
+	outputs[2][0] = new double(1);
+	outputs[3][0] = new double(0);
 
 	Network network = Network({2, 2, 1});
 
@@ -31,8 +32,20 @@ int main(int argc, char *argv[]) {
 
 	cout << "Finished" << endl;
 	for (int i = 0;i < 4;i++) {
-		network.calcOut(inputs[i]);
-		cout << inputs[i][0] << inputs[i][1] << " ";
-		cout << network.output[0] << endl;
+		network.setInput(0, inputs[i]);
+		network.calcOut();
+		cout << *inputs[i][0] << *inputs[i][1] << " ";
+		cout << *network.output[0] << endl;
 	}
+	
+	cout << "initalize cnn";
+	ComponentManager cm = ComponentManager(2, 1, 3); //insize, outsize, length
+	cm.setComponent(&network, 1, 0);
+
+	cout << "Finished" << endl;
+	for (int i = 0; i < 4; i++) {
+		cout << *inputs[i][0] << *inputs[i][1] << " ";
+		cout << *cm.calcOut(inputs[i])[0] << endl;
+	}
+
 }

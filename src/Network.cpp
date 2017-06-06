@@ -7,7 +7,7 @@
 #include "Component.h"
 #include "Utility.h"
 
-using namespace std;
+using namespace std; //todo remove this
 
 Network::Network() {
 	//
@@ -18,7 +18,8 @@ Network::Network(vector<int> neuronsPerLayer) {
 	int layerCount = neuronsPerLayer.size();
 	inputSize = neuronsPerLayer[0];
 	outputSize = neuronsPerLayer[layerCount - 1];
-	output = vector<double>(outputSize);
+	output = vector<double*>(outputSize);
+	input = vector<double*>(inputSize);
 
 	layers = vector<vector<Neuron*>>(layerCount);
 	lastError = vector<double>(outputSize);
@@ -49,11 +50,12 @@ std::string Network::getInfo() {
 	return s;
 }
 
-double Network::AbsoluteError(std::vector<std::vector<double>> inputs, std::vector<std::vector<double>> targets) {
+double Network::AbsoluteError(std::vector<std::vector<double*>> inputs, std::vector<std::vector<double*>> targets) {
 	double retVal = 0;
 
 	for (int i = 0;i < inputs.size();i++) {
-		backpropagate(inputs[i], targets[i], 0, 0);
+		input = inputs[i];
+		backpropagate(targets[i], 0, 0);
 		for (int j = 0;j < outputSize;j++) {
 			retVal += abs(layers[layers.size() - 1][j]->error);
 		}
@@ -62,15 +64,15 @@ double Network::AbsoluteError(std::vector<std::vector<double>> inputs, std::vect
 	return retVal;
 }
 
-void Network::backpropagate(std::vector<double> _input, std::vector<double> target, double lernRate, double momentum) {
-	if (_input.size() != inputSize)  throw new exception("Invalid input length");
+//carefull! the normal inputs gets overwritten here because you give the network a inputset;
+void Network::backpropagate(std::vector<double*> target, double lernRate, double momentum) {
 	if (target.size() != outputSize) throw new exception("Invalid target length");
 
-	calcOut(_input);
+	calcOut();
 
 	// Set errors in output layer 
 	for (int j = 0;j < outputSize;j++) {
-		lastError[j] = target[j] - output[j];
+		lastError[j] = *target[j] - *output[j];
 		layers[layers.size() - 1][j]->calcError(lastError[j]);
 		layers[layers.size() - 1][j]->adjustWeights(lernRate, momentum);
 	}
@@ -90,11 +92,11 @@ void Network::backpropagate(std::vector<double> _input, std::vector<double> targ
 	}
 }
 
-void Network::calcOut(std::vector<double> input) {
+void Network::calcOut() {
 	if (input.size() != inputSize) throw new exception("Invalid Input length");
 
 	for (int j = 0;j < inputSize;j++) {
-		layers[0][j]->setOutput(input[j]);
+		layers[0][j]->setOutput(*input[j]);
 	}
 
 	for (int i = 1; i < layers.size(); i++) {
@@ -106,11 +108,11 @@ void Network::calcOut(std::vector<double> input) {
 	if(output.size() != outputSize) throw new exception("invalid Output length");
 
 	for (int i = 0; i < output.size(); i++) {
-		output[i] = layers[layers.size() - 1][i]->lastOutput;
+		output[i] = new double(layers[layers.size() - 1][i]->lastOutput);
 	}
 }
 
-double Network::trainOn(std::vector<std::vector<double>> inputs, std::vector<std::vector<double>> targets, int iterations) {
+double Network::trainOn(std::vector<std::vector<double*>> inputs, std::vector<std::vector<double*>> targets, int iterations) {
 	// [TODO] Do some cuda stuff over here
 	int rnd;
 	double lernrate = 1 / (double)inputSize;
@@ -121,7 +123,8 @@ double Network::trainOn(std::vector<std::vector<double>> inputs, std::vector<std
 	for (int i = 0; i < iterations; i++) {
 		rnd = getRandomInt(0, inputs.size() - 1);
 
-		backpropagate(inputs[rnd], targets[rnd], lernrate / (i / 1000 + 1), 0.1);
+		input = inputs[rnd];
+		backpropagate(targets[rnd], lernrate / (i / 1000 + 1), 0.1);
 		if (i % 100 == 0) {
 			currentError = AbsoluteError(inputs, targets);
 			deviation = fmax(bufferError, currentError) - fmin(bufferError, currentError);
@@ -144,7 +147,8 @@ double Network::trainOn(std::vector<std::vector<double>> inputs, std::vector<std
 					if (deviation <= 0.002) {
 						rnd = getRandomInt(0, inputs.size() - 1);
 						cout << "Did Jump" << endl;
-						backpropagate(inputs[rnd], targets[rnd], 2, 0);
+						input = inputs[rnd];
+						backpropagate(targets[rnd], 2, 0);
 						i++;
 					}
 				}
@@ -156,7 +160,6 @@ double Network::trainOn(std::vector<std::vector<double>> inputs, std::vector<std
 
 	return AbsoluteError(inputs, targets);
 }
-
 
 ostream& operator<<(ostream& stream, Network& n) {
 	stream << "Network " << &n << " " << n.getInfo() << endl;

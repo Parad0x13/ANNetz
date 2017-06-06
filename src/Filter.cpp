@@ -15,7 +15,7 @@ Filter::~Filter() {
 	//
 }
 
-void Filter::calcOut(std::vector<double> input) {
+void Filter::calcOut() {
 	double buffer;
 	// Moving feature frame
 	for (int x = 0;x < outX;x++) {
@@ -25,11 +25,11 @@ void Filter::calcOut(std::vector<double> input) {
 			// Sum up featureFrame at this position
 			for (int fx = 0;fx < featureX;fx++) {
 				for (int fy = 0;fy < featureX;fy++) {
-					buffer += calcTF(input[x + fx + (y + fy) * inX] - feature[fx + fy * featureX]);
+					buffer += calcTF(*input[x + fx + (y + fy) * inX] - feature[fx + fy * featureX]);
 				}
 			}
 
-			output[x + outX * y] = buffer / feature.size();
+			output[x + outX * y] = new double(buffer / feature.size());
 		}
 	}
 }
@@ -37,9 +37,14 @@ void Filter::calcOut(std::vector<double> input) {
 void Filter::refreshInputSize(int _inX, int _inY) {
 	inX = _inX, inY = _inY;
 	if (featureX > inX || featureY > inY) throw new std::exception("FeatureSize is bigger then the InputSize");
+
+	inputSize = inX * inY;
 	outX = inX - featureX + 1;
 	outY = inY - featureY + 1;
-	output = std::vector<double>(outX * outY);
+
+	outputSize = outX * outY;
+	output = std::vector<double*>(outputSize);
+	input = std::vector<double*>(inputSize);
 }
 
 double Filter::calcTF(double x) {

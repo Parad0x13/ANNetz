@@ -11,9 +11,7 @@ public:
 	PassThrough(int);
 	~PassThrough();
 
-	void calcOut(std::vector<double>);
-
-	int inputSize = 0;
+	void calcOut();
 private:
 
 };

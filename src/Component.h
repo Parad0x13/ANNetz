@@ -5,9 +5,13 @@
 class Component {
 public:
 	Component() {};
-	//int InputSize, OutputSize; TODO!
-	std::vector<double> output;
-	virtual void calcOut(std::vector<double>) = 0;		// Implied  ]0, 1[
+	int inputSize, outputSize;
+	std::vector<double*> output;
+
+	void setInput(int, std::vector<double*>);
+	virtual void calcOut() = 0; // Implied  ]0, 1]
+protected:
+	std::vector<double*> input;
 };
 
 #endif

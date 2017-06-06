@@ -16,7 +16,7 @@ public:
 	~Filter();
 
 	TransferFunction TF;
-	void calcOut(std::vector<double>);
+	void calcOut();
 	void refreshInputSize(int, int);
 
 private:
