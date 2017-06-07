@@ -71,13 +71,25 @@ void ComponentManager::setComponent(Component* com, int layer, int index) {
 void ComponentManager::getDataSet(std::string path) {
 	string line;
 	vector<string> outs;
+	vector<string> buffer;
+	int DataMode; // Bmp, BinaryData
 	// Read IndexFile
 	ifstream myfile(path + "\\index.txt");
 	if (myfile.is_open()) {
 		getline(myfile, line);
+		if (line == "bmp") {
+			DataMode = 0;
+		}
+		else {}
 		// [TODO] Switch here the data types 
 		getline(myfile, line);
 		outs = splitString(line, ';');
+		inputSize = std::stoi(outs[0]);
+		OutputSize = std::stoi(outs[1]);
+
+		getline(myfile, line);
+		outs = splitString(line, ';');
+
 		myfile.close();
 	}
 	else error("Unable to open file");
@@ -86,45 +98,77 @@ void ComponentManager::getDataSet(std::string path) {
 	inputs = vector<vector<double*>>(outs.size());
 
 	for (int i = 0; i < outs.size(); i++) {
-		targets[i] = vector<double*>(1);	// Change that later!
-		inputs[i] = vector<double*>(1);
+		targets[i] = vector<double*>(OutputSize);	// Change that later!
+		inputs[i] = vector<double*>(inputSize);
 
-		targets[i][0] = new double(std::stod(outs[i]));
+		buffer = splitString(outs[i], '#'); //for multiLayer output
+		for (int j = 0; j < buffer.size(); j++) {
+			targets[i][0] = new double(std::stod(buffer[j]));
+		}
 	}
 
 	// Read InputData
-	for (int i = 0; i < outs.size(); i++) {
-		stringstream ss;
-		ss << i;
-		cout << i << ".bmp" << endl;
-		inputs[i] = BMToArray(path + "\\" + ss.str() + ".bmp");
+	if (DataMode == 0) {
+		for (int i = 0; i < outs.size(); i++) {
+			stringstream ss;
+			ss << i;
+			cout << i << ".bmp" << endl;
+			inputs[i] = BMToArray(path + "\\" + ss.str() + ".bmp", BmChannelFilter::GrayScale);
+		}
 	}
+
 }
 
-vector<double*> ComponentManager::BMToArray(string path) {
+std::vector<double*> ComponentManager::BMToArray(std::string path, BmChannelFilter bmc) {
 	vector<double*> retVal;
 
 	BMP image;
 	image.ReadFromFile(path.c_str());
 
-	for (int y = 0; y < image.TellHeight(); y++) {
-		for (int x = 0; x < image.TellWidth(); x++) {
-			double greyscale = 0.30*(image(x, y)->Red) + 0.59*(image(x, y)->Green) + 0.11*(image(x, y)->Blue);
-			// [TODO] Determine why Martin decided to do 1 / greyscale rather than greyscale / 255.0
-			// The way he's doing it does bad things like division by zero and odd small numbers to work with
-			double value = 0;
-			if(greyscale > 0) value = 1.0 / greyscale;
-
-			retVal.push_back(&value);
+	switch (bmc)
+	{
+	case 0: //Raw RGB		useless?
+		for (int y = 0; y < image.TellHeight(); y++) {
+			for (int x = 0; x < image.TellWidth(); x++) {
+				double value1 = image(x, y)->Red / 255.0;
+				retVal.push_back(&value1);
+				double value2 = image(x, y)->Green / 255.0;
+				retVal.push_back(&value2);
+				double value3 = image(x, y)->Blue / 255.0;
+				retVal.push_back(&value3);
+			}
+		} break;
+	case 1: //Sorted RGB
+		for (int i = 0; i < 3; i++) {
+			for (int y = 0; y < image.TellHeight(); y++) {
+				for (int x = 0; x < image.TellWidth(); x++) {
+					double value = 0;
+					switch (i)
+					{
+					case 0: value = image(x, y)->Red / 255.0; break;
+					case 1: value = image(x, y)->Green / 255.0; break;
+					case 2: value = image(x, y)->Blue / 255.0; break;
+					}
+					retVal.push_back(&value);
+				}
+			}
 		}
-	}
-
-	// [TODO] We should probably get rid of this render to screen thing here
-	for (int y = 0; y < image.TellHeight(); y++) {
-		for (int x = 0; x < image.TellWidth(); x++) {
-			cout << "{" + getHex(image(x, y)->Red) << ", " << getHex(image(x, y)->Green) << ", " << getHex(image(x, y)->Blue) << "}";
+		break;
+	case 2: //GrayScale
+		for (int y = 0; y < image.TellHeight(); y++) {
+			for (int x = 0; x < image.TellWidth(); x++) {
+				double value = (image(x, y)->Red + image(x, y)->Green + image(x, y)->Blue) / 765.0; //255 * 3 = 765
+				retVal.push_back(&value);
+			}
+		} break;
+	case 3: //human grayScale
+		for (int y = 0; y < image.TellHeight(); y++) {
+			for (int x = 0; x < image.TellWidth(); x++) {
+				double value = (image(x, y)->Red * 0.30 + image(x, y)->Green *0.59 + image(x, y)->Blue * 0.11) / 765.0; //255 * 3 = 765
+				retVal.push_back(&value);
+			}
 		}
-		cout << endl;
+		break;
 	}
 
 	return retVal;

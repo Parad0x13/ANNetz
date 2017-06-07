@@ -19,6 +19,10 @@
 
 class ComponentManager {
 public:
+	enum BmChannelFilter {
+		RGB, RGBSorted, GrayScale, HumanGrayScale
+	};
+
 	ComponentManager(int, int, int);
 	~ComponentManager();
 
@@ -30,7 +34,7 @@ private:
 
 	std::vector<std::vector<double*>> targets;
 	std::vector<std::vector<double*>> inputs;
-	std::vector<double*> BMToArray(std::string path);
+	std::vector<double*> BMToArray(std::string path, BmChannelFilter);
 
 	std::vector<std::vector<Component*>> components;
 	std::vector<std::vector<Connection*>> connections;
