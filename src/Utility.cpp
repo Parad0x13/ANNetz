@@ -68,28 +68,21 @@ std::vector<std::string> splitString(std::string s, char c) {
 	return elems;
 }
 
-std::vector<char> readFileBytes(std::string name) {
-	std::ifstream file(name);
-	std::ostringstream ss;
-	ss << file.rdbuf();
-	const std::string& s = ss.str();
-	std::vector<char> vec(s.begin(), s.end());
-
-	return vec;
-}
 std::string getHex(char c) {
 	string chars = "0123456789ABCDEF";
-	string str = "";
+	string retVal = "";
 	int val = (int)c;
 	if (val < 0) val = 256 + val;
 
 	int buffer;
 	buffer = val % 16;
-	str += chars[buffer];
+	retVal += chars[buffer];
 	val -= buffer * 16;
-	str += chars[val];
+	retVal += chars[val];
 
-	return str;
+	retVal = "0x" + retVal;
+
+	return retVal;
 }
 
 // [TODO] Decide if we want to remove this in favor of throwing exceptions only

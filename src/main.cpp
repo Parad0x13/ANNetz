@@ -56,6 +56,5 @@ int main(int argc, char *argv[]) {
 	int bytes = GetModuleFileName(NULL, buffer, MAX_PATH);
 	basic_string<TCHAR> currentDirectory(buffer);
 	currentDirectory += "\\..\\..\\..\\ANN_data";
-	cout << currentDirectory << endl;
 	cm.getDataSet(currentDirectory);
 }

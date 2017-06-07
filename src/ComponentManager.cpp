@@ -26,7 +26,7 @@ ComponentManager::~ComponentManager() {
 	//
 }
 
-std::vector<double*> ComponentManager::calcOut(std::vector<double*> input) {
+vector<double*> ComponentManager::calcOut(vector<double*> input) {
 	// Set Input
 	for (int i = 0; i < components[0].size(); i++) {
 		components[0][i]->setInput(0, input);
@@ -48,7 +48,7 @@ std::vector<double*> ComponentManager::calcOut(std::vector<double*> input) {
 	return components[components.size() - 1][0]->output;
 }
 
-void ComponentManager::setComponent(Component * com, int layer, int index) {
+void ComponentManager::setComponent(Component* com, int layer, int index) {
 	if (layer < components.size() - 1) {	// Not last layer 
 		for (int j = 0; j < connections[layer].size(); j++) {
 			if (connections[layer][j]->indexA == components[layer][index]) {
@@ -69,10 +69,6 @@ void ComponentManager::setComponent(Component * com, int layer, int index) {
 }
 
 void ComponentManager::getDataSet(std::string path) {
-	//BMP image;
-	//image.ReadFromFile((path + "\\0.bmp").c_str());
-
-	// START OF HIS CODE
 	string line;
 	vector<string> outs;
 	// Read IndexFile
@@ -105,23 +101,31 @@ void ComponentManager::getDataSet(std::string path) {
 	}
 }
 
-std::vector<double*> ComponentManager::BMToArray(std::string path) {
-	vector<char> bytes = readFileBytes(path);
-	vector<double*> ret;
-	int offset = 54;
+vector<double*> ComponentManager::BMToArray(string path) {
+	vector<double*> retVal;
 
-	for (int i = offset; i < bytes.size(); i++) {
-		int val = (int)bytes[i];
-		if (val < 0) val = 256 + val;
-		ret.push_back(new double(1.0 / val));
+	BMP image;
+	image.ReadFromFile(path.c_str());
+
+	for (int y = 0; y < image.TellHeight(); y++) {
+		for (int x = 0; x < image.TellWidth(); x++) {
+			double greyscale = 0.30*(image(x, y)->Red) + 0.59*(image(x, y)->Green) + 0.11*(image(x, y)->Blue);
+			// [TODO] Determine why Martin decided to do 1 / greyscale rather than greyscale / 255.0
+			// The way he's doing it does bad things like division by zero and odd small numbers to work with
+			double value = 0;
+			if(greyscale > 0) value = 1.0 / greyscale;
+
+			retVal.push_back(&value);
+		}
 	}
 
-	for (int y = 3; y >= 0; y--) {
-		for (int x = 0; x < 4; x++) {
-			cout << "{" << getHex(bytes[offset + (x + 4 * y) * 3 + 0]) << "," << getHex(bytes[offset + (x + 4 * y) * 3 + 1]) << "," << getHex(bytes[offset + (x + 4 * y) * 3 + 2]) << "}";
+	// [TODO] We should probably get rid of this render to screen thing here
+	for (int y = 0; y < image.TellHeight(); y++) {
+		for (int x = 0; x < image.TellWidth(); x++) {
+			cout << "{" + getHex(image(x, y)->Red) << ", " << getHex(image(x, y)->Green) << ", " << getHex(image(x, y)->Blue) << "}";
 		}
 		cout << endl;
 	}
 
-	return ret;
+	return retVal;
 }

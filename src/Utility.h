@@ -17,7 +17,6 @@ std::string getTag(int, int, std::string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 double normalDistribution();
 int getRandomInt(int, int);
 std::vector<std::string> splitString(std::string, char);
-std::vector<char> readFileBytes(std::string);
 std::string getHex(char);
 
 void error(std::string);
