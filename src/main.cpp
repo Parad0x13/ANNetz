@@ -1,7 +1,9 @@
 #include <iostream>
+#include <vector>
+#include <Windows.h>
+
 #include "Network.h"
 #include "ComponentManager.h"
-#include <vector>
 
 using namespace std;
 
@@ -14,10 +16,10 @@ int main(int argc, char *argv[]) {
 		outputs[i] = vector<double*>(1);
 	}
 
-	inputs[0][0] = new double(0); inputs[0][1] = new double(0);
-	inputs[1][0] = new double(0); inputs[1][1] = new double(1);
-	inputs[2][0] = new double(1); inputs[2][1] = new double(0);
-	inputs[3][0] = new double(1); inputs[3][1] = new double(1);
+	inputs[0][0]  = new double(0); inputs[0][1] = new double(0);
+	inputs[1][0]  = new double(0); inputs[1][1] = new double(1);
+	inputs[2][0]  = new double(1); inputs[2][1] = new double(0);
+	inputs[3][0]  = new double(1); inputs[3][1] = new double(1);
 	outputs[0][0] = new double(0);
 	outputs[1][0] = new double(1);
 	outputs[2][0] = new double(1);
@@ -25,12 +27,12 @@ int main(int argc, char *argv[]) {
 
 	Network network = Network({2, 2, 1});
 
-	cout << "This will be difficult to read via text..." << endl;
 	cout << network << endl;
 
 	network.trainOn(inputs, outputs, 1000);
 
 	cout << "Finished" << endl;
+
 	for (int i = 0;i < 4;i++) {
 		network.setInput(0, inputs[i]);
 		network.calcOut();
@@ -38,15 +40,22 @@ int main(int argc, char *argv[]) {
 		cout << *network.output[0] << endl;
 	}
 	
-	cout << "initalize cnn" << endl;
-	ComponentManager cm = ComponentManager(2, 1, 3); //insize, outsize, length
+	cout << "initalize CNN" << endl;
+	ComponentManager cm = ComponentManager(2, 1, 3);	// insize, outsize, length
 	cm.setComponent(&network, 1, 0);
 
 	cout << "Finished" << endl;
+
 	for (int i = 0; i < 4; i++) {
 		cout << *inputs[i][0] << *inputs[i][1] << " ";
 		cout << *cm.calcOut(inputs[i])[0] << endl;
 	}
 
-	cm.getDataSet("C:\\Users\\Martin\\Desktop\\ANNetz\\AnnData"); //you need to change this if you want it to work on youre pc
+	// [TODO] We need to find a better way of doing this...
+	TCHAR buffer[MAX_PATH];
+	int bytes = GetModuleFileName(NULL, buffer, MAX_PATH);
+	basic_string<TCHAR> currentDirectory(buffer);
+	currentDirectory += "\\..\\..\\..\\ANN_data";
+	cout << currentDirectory << endl;
+	cm.getDataSet(currentDirectory);
 }

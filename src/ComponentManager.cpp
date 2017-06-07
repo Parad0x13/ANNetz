@@ -1,7 +1,7 @@
 #include "ComponentManager.h"
 
-
 using namespace std;
+
 ComponentManager::ComponentManager(int inSize, int outSize, int Length) : inputSize(inSize), OutputSize(outSize) {
 	components = vector<vector<Component*>>(Length);
 	connections = vector<vector<Connection*>>(Length - 1);
@@ -9,10 +9,10 @@ ComponentManager::ComponentManager(int inSize, int outSize, int Length) : inputS
 	for (int i = 0; i < Length; i++) {
 		components[i] = vector<Component*>(1);
 
-		if(i == 0) components[i][0] = new PassThrough(inputSize);
+		if(i == 0) components[i][0] = new Passthrough(inputSize);
 		else {
-			if (i == Length - 1) components[i][0] = new PassThrough(OutputSize);
-			else components[i][0] = new PassThrough(1);
+			if (i == Length - 1) components[i][0] = new Passthrough(OutputSize);
+			else components[i][0] = new Passthrough(1);
 		}	
 	}
 
@@ -23,22 +23,24 @@ ComponentManager::ComponentManager(int inSize, int outSize, int Length) : inputS
 }
 
 ComponentManager::~ComponentManager() {
+	//
 }
 
 std::vector<double*> ComponentManager::calcOut(std::vector<double*> input) {
-	//set Input
+	// Set Input
 	for (int i = 0; i < components[0].size(); i++) {
 		components[0][i]->setInput(0, input);
 		components[0][i]->calcOut();
 	}
 
-	//go through layerwise
+	// Go through layerwise
 	for (int i = 1; i < components.size(); i++) {
-		//refresh all inputs;
+		// Refresh all inputs;
 		for (int c = 0; c < connections[i - 1].size(); c++) {
 			connections[i - 1][c]->setInput();
 		}
-		//calc Outputs
+
+		// Calc Outputs
 		for (int c = 0; c < components[i].size(); c++) {
 			components[i][c]->calcOut();
 		}
@@ -47,14 +49,15 @@ std::vector<double*> ComponentManager::calcOut(std::vector<double*> input) {
 }
 
 void ComponentManager::setComponent(Component * com, int layer, int index) {
-	if (layer < components.size() - 1) { //not last layer 
+	if (layer < components.size() - 1) {	// Not last layer 
 		for (int j = 0; j < connections[layer].size(); j++) {
 			if (connections[layer][j]->indexA == components[layer][index]) {
 				connections[layer][j]->indexA = com;
 			}
 		}
 	}
-	if (layer != 0) { //not first layer 
+
+	if (layer != 0) {	// Not first layer 
 		for (int j = 0; j < connections[layer - 1].size(); j++) {
 			if (connections[layer - 1][j]->indexB == components[layer][index]) {
 				connections[layer - 1][j]->indexB = com;
@@ -66,54 +69,59 @@ void ComponentManager::setComponent(Component * com, int layer, int index) {
 }
 
 void ComponentManager::getDataSet(std::string path) {
+	//BMP image;
+	//image.ReadFromFile((path + "\\0.bmp").c_str());
+
+	// START OF HIS CODE
 	string line;
 	vector<string> outs;
-	//read IndexFile
-	ifstream myfile(path + "\\Index.txt");
-	if (myfile.is_open())
-	{
+	// Read IndexFile
+	ifstream myfile(path + "\\index.txt");
+	if (myfile.is_open()) {
 		getline(myfile, line);
-		//[TODO] switch here the data types 
+		// [TODO] Switch here the data types 
 		getline(myfile, line);
 		outs = splitString(line, ';');
 		myfile.close();
 	}
-	else cout << "Unable to open file";
+	else error("Unable to open file");
 
 	targets = vector<vector<double*>>(outs.size());
 	inputs = vector<vector<double*>>(outs.size());
+
 	for (int i = 0; i < outs.size(); i++) {
-		targets[i] = vector<double*>(1); //change that later!
+		targets[i] = vector<double*>(1);	// Change that later!
 		inputs[i] = vector<double*>(1);
 
 		targets[i][0] = new double(std::stod(outs[i]));
 	}
-	//read InputData
-	
+
+	// Read InputData
 	for (int i = 0; i < outs.size(); i++) {
 		stringstream ss;
 		ss << i;
 		cout << i << ".bmp" << endl;
-		inputs[i] = BmToArray(path + "\\" + ss.str() + ".bmp");
+		inputs[i] = BMToArray(path + "\\" + ss.str() + ".bmp");
 	}
 }
 
-std::vector<double*> ComponentManager::BmToArray(std::string path) {
+std::vector<double*> ComponentManager::BMToArray(std::string path) {
 	vector<char> bytes = readFileBytes(path);
 	vector<double*> ret;
 	int offset = 54;
+
 	for (int i = offset; i < bytes.size(); i++) {
 		int val = (int)bytes[i];
 		if (val < 0) val = 256 + val;
-		ret.push_back( new double(1.0 / val));
+		ret.push_back(new double(1.0 / val));
 	}
+
 	for (int y = 3; y >= 0; y--) {
 		for (int x = 0; x < 4; x++) {
 			cout << "{" << getHex(bytes[offset + (x + 4 * y) * 3 + 0]) << "," << getHex(bytes[offset + (x + 4 * y) * 3 + 1]) << "," << getHex(bytes[offset + (x + 4 * y) * 3 + 2]) << "}";
 		}
 		cout << endl;
 	}
+
 	return ret;
 }
-
-

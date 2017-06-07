@@ -12,6 +12,7 @@ public:
 	Component *indexA, *indexB;
 
 	void setInput();
+
 private:
 	friend std::ostream& operator<<(std::ostream&, Connection&);
 };

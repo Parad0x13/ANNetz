@@ -1,4 +1,6 @@
 #include <chrono>
+#include <iostream>
+
 #include "Utility.h"
 
 using namespace std;
@@ -53,10 +55,12 @@ int getRandomInt(int _inclusiveLowerLimit, int inclusiveUpperLimit) {
 	uniform_int_distribution<int> distribution(_inclusiveLowerLimit, inclusiveUpperLimit);
 	return distribution(random_engine);
 }
+
 std::vector<std::string> splitString(std::string s, char c) {
 	std::vector<string> elems;
 	std::stringstream ss(s);
 	std::string number;
+
 	while (std::getline(ss, number, c)) {
 		elems.push_back(number);
 	}
@@ -86,4 +90,9 @@ std::string getHex(char c) {
 	str += chars[val];
 
 	return str;
+}
+
+// [TODO] Decide if we want to remove this in favor of throwing exceptions only
+void error(std::string value) {
+	cout << "Error: " << value << endl;
 }

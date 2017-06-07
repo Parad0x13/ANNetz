@@ -9,7 +9,8 @@ public:
 	std::vector<double*> output;
 
 	void setInput(int, std::vector<double*>);
-	virtual void calcOut() = 0; // Implied  ]0, 1]
+	virtual void calcOut() = 0; // Implied  [0, 1]
+
 protected:
 	std::vector<double*> input;
 };

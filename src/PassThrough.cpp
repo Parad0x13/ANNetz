@@ -1,11 +1,12 @@
-#include "PassThrough.h"
 #include <vector>
 
+#include "Passthrough.h"
 
-PassThrough::PassThrough() {
+Passthrough::Passthrough() {
+	//
 }
 
-PassThrough::PassThrough(int inSize) {
+Passthrough::Passthrough(int inSize) {
 	inputSize = inSize;
 	outputSize = inSize;
 
@@ -13,9 +14,10 @@ PassThrough::PassThrough(int inSize) {
 	input = std::vector<double*>(inputSize);
 }
 
-PassThrough::~PassThrough() {
+Passthrough::~Passthrough() {
+	//
 }
 
-void PassThrough::calcOut() {
+void Passthrough::calcOut() {
 	output = input;
 }

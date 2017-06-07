@@ -1,5 +1,6 @@
-#include "Pooling.h"
 #include <math.h>
+
+#include "Pooling.h"
 
 Pooling::Pooling(int _inX, int _inY) {
 	refreshInputSize(_inX, _inY);

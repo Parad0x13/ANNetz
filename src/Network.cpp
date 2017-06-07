@@ -7,7 +7,7 @@
 #include "Component.h"
 #include "Utility.h"
 
-using namespace std; //todo remove this
+using namespace std;
 
 Network::Network() {
 	//
@@ -64,8 +64,8 @@ double Network::AbsoluteError(std::vector<std::vector<double*>> inputs, std::vec
 	return retVal;
 }
 
-//carefull! the normal inputs gets overwritten here because you give the network a inputset;
-void Network::backpropagate(std::vector<double*> target, double lernRate, double momentum) {
+// Carefull! the normal inputs gets overwritten here because you give the network an inputset
+void Network::backpropagate(std::vector<double*> target, double learnRate, double momentum) {
 	if (target.size() != outputSize) throw new exception("Invalid target length");
 
 	calcOut();
@@ -74,10 +74,10 @@ void Network::backpropagate(std::vector<double*> target, double lernRate, double
 	for (int j = 0;j < outputSize;j++) {
 		lastError[j] = *target[j] - *output[j];
 		layers[layers.size() - 1][j]->calcError(lastError[j]);
-		layers[layers.size() - 1][j]->adjustWeights(lernRate, momentum);
+		layers[layers.size() - 1][j]->adjustWeights(learnRate, momentum);
 	}
 
-	if (lernRate != 0) {
+	if (learnRate != 0) {
 		for (int i = layers.size() - 2;i > 0;i--) {
 			for (int j = 0;j < layers[i].size();j++) {
 				double bError = 0;
@@ -86,7 +86,7 @@ void Network::backpropagate(std::vector<double*> target, double lernRate, double
 				}
 
 				layers[i][j]->calcError(bError);
-				layers[i][j]->adjustWeights(lernRate, momentum);
+				layers[i][j]->adjustWeights(learnRate, momentum);
 			}
 		}
 	}
@@ -105,7 +105,7 @@ void Network::calcOut() {
 		}
 	}
 
-	if(output.size() != outputSize) throw new exception("invalid Output length");
+	if(output.size() != outputSize) throw new exception("Invalid Output length");
 
 	for (int i = 0; i < output.size(); i++) {
 		output[i] = new double(layers[layers.size() - 1][i]->lastOutput);
@@ -132,17 +132,16 @@ double Network::trainOn(std::vector<std::vector<double*>> inputs, std::vector<st
 			if (bufferError == 0) bufferError = currentError;
 			cout << "Itaration: " << i << "  \tAbsolut Error = " << currentError << "  \tDeviation: " << deviation << endl;
 
-
 			if (i % 10000 == 0) {
-				//random change
+				// Random change
 				if (deviation <= 0.0001) {
 					rnd = getRandomInt(1, layers.size() - 1);
 					layers[rnd][getRandomInt(0, layers[rnd].size() - 1)]->changeARandomWeight();
-					cout << "Did Random Weight Change" << endl;
+					cout << "Did random weight change" << endl;
 				}
 			}
 			else {
-				//jump
+				// Jump
 				if (i % 1000 == 0) {
 					if (deviation <= 0.002) {
 						rnd = getRandomInt(0, inputs.size() - 1);

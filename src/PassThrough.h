@@ -1,20 +1,18 @@
-#ifndef PassThrough_H
-#define PassThrough_H
+#ifndef PASSTHROUGH_H
+#define PASSTHROUGH_H
 
 #include <vector>
 #include "Utility.h"
+
 #include "Component.h"
 
-class PassThrough : public Component{
+class Passthrough : public Component{
 public:
-	PassThrough();
-	PassThrough(int);
-	~PassThrough();
+	Passthrough();
+	Passthrough(int);
+	~Passthrough();
 
 	void calcOut();
-private:
-
 };
 
 #endif
-

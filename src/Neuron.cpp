@@ -71,8 +71,7 @@ void Neuron::adjustWeights(double lernRate, double momentum) {
 	previousBiasDelta = bufferDelta;
 }
 
-void Neuron::changeARandomWeight()
-{
+void Neuron::changeARandomWeight() {
 	int rnd = getRandomInt(0, weights.size() - 1);
 	weights[rnd] = normalDistribution();
 }

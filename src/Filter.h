@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <string>
-#include "Component.h"
 
+#include "Component.h"
 
 class Filter : public Component {
 public:
@@ -28,6 +28,3 @@ private:
 };
 
 #endif
-
-
-
