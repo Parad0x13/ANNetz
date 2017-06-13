@@ -51,4 +51,6 @@ Not yet decided
 
 [Google's C++ Syntax Guide](http://google.github.io/styleguide/cppguide.html)
 
+[DirectX SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812)
+
 git clean -df
