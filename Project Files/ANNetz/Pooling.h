@@ -1,5 +1,4 @@
-#ifndef POOLING_H
-#define POOLING_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -17,5 +16,3 @@ private:
 	int inX, inY;
 	int outX, outY;
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef CONNECTION_H
-#define CONNECTION_H
+#pragma once
 
 #include <iostream>
 #include "Component.h"
@@ -16,5 +15,3 @@ public:
 private:
 	friend std::ostream& operator<<(std::ostream&, Connection&);
 };
-
-#endif

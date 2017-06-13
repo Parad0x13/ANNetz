@@ -4,6 +4,7 @@
 
 #include "Network.h"
 #include "ComponentManager.h"
+#include "DXFramework.h"
 
 using namespace std;
 
@@ -58,4 +59,10 @@ int main(int argc, char *argv[]) {
 	basic_string<TCHAR> currentDirectory(buffer);
 	currentDirectory += "\\..\\..\\..\\ANN_data";
 	cm.getDataSet(currentDirectory);*/
+
+	DXFramework* framework = new DXFramework();
+	if (framework->initialize()) {
+		framework->begin();
+	}
+	delete framework;
 }

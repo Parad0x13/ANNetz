@@ -1,5 +1,4 @@
-#ifndef NEURON_H
-#define NEURON_H
+#pragma once
 
 #include "Utility.h"
 
@@ -35,5 +34,3 @@ private:
 	std::vector<double> previousWeightDelta;
 	double bias, previousBiasDelta;
 };
-
-#endif

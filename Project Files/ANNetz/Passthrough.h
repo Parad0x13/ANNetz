@@ -1,5 +1,4 @@
-#ifndef PASSTHROUGH_H
-#define PASSTHROUGH_H
+#pragma once
 
 #include <vector>
 #include "Utility.h"
@@ -14,5 +13,3 @@ public:
 
 	void calcOut();
 };
-
-#endif

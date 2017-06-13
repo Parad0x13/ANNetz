@@ -1,5 +1,4 @@
-#ifndef ComponentManager_H
-#define ComponentManager_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -39,5 +38,3 @@ private:
 	std::vector<std::vector<Component*>> components;
 	std::vector<std::vector<Connection*>> connections;
 };
-
-#endif

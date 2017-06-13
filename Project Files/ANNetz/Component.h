@@ -1,5 +1,4 @@
-#ifndef COMPONENT_H
-#define COMPONENT_H
+#pragma once
 
 #include <vector>
 class Component {
@@ -14,5 +13,3 @@ public:
 protected:
 	std::vector<double*> input;
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef FILTER_H
-#define FILTER_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -26,5 +25,3 @@ private:
 	std::vector<double> feature;
 	double calcTF(double);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef NETWORK_H
-#define NETWORK_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -29,5 +28,3 @@ private:
 
 	friend std::ostream& operator<<(std::ostream&, Network&);
 };
-
-#endif
