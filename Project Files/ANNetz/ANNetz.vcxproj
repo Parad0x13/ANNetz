@@ -44,6 +44,17 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="0.bmp" />
+    <Image Include="1.bmp" />
+    <Image Include="2.bmp" />
+    <Image Include="3.bmp" />
+    <Image Include="4.bmp" />
+    <Image Include="5.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="index.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{63BDFB93-2B64-44B3-A872-7700356AB1D8}</ProjectGuid>
