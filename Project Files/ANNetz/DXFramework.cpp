@@ -7,7 +7,7 @@ using namespace std;
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 DXFramework::DXFramework() {
-
+	//
 }
 
 DXFramework::~DXFramework() {
@@ -102,7 +102,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
 	return 0;
 }
 
-HRESULT DXFramework::InitDevice() {
+HRESULT DXFramework::initDevice() {
 	HRESULT hr = S_OK;
 
 	RECT rc;
@@ -115,16 +115,14 @@ HRESULT DXFramework::InitDevice() {
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	D3D_DRIVER_TYPE driverTypes[] =
-	{
+	D3D_DRIVER_TYPE driverTypes[] = {
 		D3D_DRIVER_TYPE_HARDWARE,
 		D3D_DRIVER_TYPE_WARP,
 		D3D_DRIVER_TYPE_REFERENCE,
 	};
 	UINT numDriverTypes = ARRAYSIZE(driverTypes);
 
-	D3D_FEATURE_LEVEL featureLevels[] =
-	{
+	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_11_0,
 		D3D_FEATURE_LEVEL_10_1,
 		D3D_FEATURE_LEVEL_10_0,
@@ -145,27 +143,21 @@ HRESULT DXFramework::InitDevice() {
 	sd.SampleDesc.Quality = 0;
 	sd.Windowed = TRUE;
 
-	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-	{
+	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++) {
 		g_driverType = driverTypes[driverTypeIndex];
-		hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-			D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
-		if (SUCCEEDED(hr))
-			break;
+		hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+		if (SUCCEEDED(hr)) break;
 	}
-	if (FAILED(hr))
-		return hr;
+	if (FAILED(hr)) return hr;
 
 	// Create a render target view
 	ID3D11Texture2D* pBackBuffer = NULL;
 	hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-	if (FAILED(hr))
-		return hr;
+	if (FAILED(hr)) return hr;
 
 	hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
 	pBackBuffer->Release();
-	if (FAILED(hr))
-		return hr;
+	if (FAILED(hr)) return hr;
 
 	g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
 
@@ -193,7 +185,7 @@ void DXFramework::CleanupDevice() {
 
 void DXFramework::render() {
 	// Just clear the backbuffer
-	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
+	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // Red, Green Blue, Alpha
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
 	g_pSwapChain->Present(0, 0);
 }

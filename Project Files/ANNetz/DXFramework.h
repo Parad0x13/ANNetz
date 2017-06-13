@@ -47,7 +47,7 @@ public:
 	IDXGISwapChain*         g_pSwapChain = NULL;
 	ID3D11RenderTargetView* g_pRenderTargetView = NULL;
 
-	HRESULT InitDevice();
+	HRESULT initDevice();
 	void CleanupDevice();
 
 	void render();
