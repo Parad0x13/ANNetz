@@ -52,9 +52,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	// [TODO] We need to find a better way of doing this...
-	TCHAR buffer[MAX_PATH];
+	// [TODO][WARN] This no longer works after the project refactoring... need to get it working some other way
+	/*TCHAR buffer[MAX_PATH];
 	int bytes = GetModuleFileName(NULL, buffer, MAX_PATH);
 	basic_string<TCHAR> currentDirectory(buffer);
 	currentDirectory += "\\..\\..\\..\\ANN_data";
-	cm.getDataSet(currentDirectory);
+	cm.getDataSet(currentDirectory);*/
 }
