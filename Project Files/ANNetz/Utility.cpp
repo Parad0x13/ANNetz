@@ -6,11 +6,11 @@
 using namespace std;
 
 // It's important to seed our random generator w/ system clock. Perfectly uniform distribution is achieved here.
-default_random_engine random_engine(chrono::system_clock::now().time_since_epoch().count());
+default_random_engine random_engine((unsigned int)chrono::system_clock::now().time_since_epoch().count());
 
 // [TODO] Fix the fact that std::string::length() cannot handle unicode
 string generateRandomTag(int len, string available) {
-	uniform_int_distribution<int> distribution(0, available.length() - 1);
+	uniform_int_distribution<int> distribution(0, (int)available.length() - 1);
 	string retVal = "";
 
 	for(auto x = 0;x < len;x++)
@@ -29,12 +29,11 @@ std::string getTag(int index, int len, string available) {
 	string ret = "";
 	int buffer = 0, basis;
 
-	if (index >= pow(available.length(), len)) {
-		return "Overflow";
-	}
+	// [TODO] We really should be throwing exceptions instead
+	if (index >= pow(available.length(), len)) return "Overflow";
 
 	for (int i = len - 1; i > -1; i--) {
-		basis = pow(available.length(), i);
+		basis = (int)pow(available.length(), i);
 		buffer = index / basis;
 		index -= buffer * basis;
 		ret += available[buffer];

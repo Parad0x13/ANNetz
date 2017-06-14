@@ -47,7 +47,7 @@ double Neuron::setOutput(double value) {
 }
 
 void Neuron::setRandomWeights() {
-	int count = weights.size();
+	int count = (int)weights.size();
 
 	for (int i = 0; i < count; i++) {
 		weights[i] = normalDistribution();
@@ -72,7 +72,7 @@ void Neuron::adjustWeights(double lernRate, double momentum) {
 }
 
 void Neuron::changeARandomWeight() {
-	int rnd = getRandomInt(0, weights.size() - 1);
+	int rnd = getRandomInt(0, (int)weights.size() - 1);
 	weights[rnd] = normalDistribution();
 }
 

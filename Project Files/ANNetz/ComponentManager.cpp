@@ -72,7 +72,7 @@ void ComponentManager::getDataSet(std::string path) {
 	string line;
 	vector<string> outs;
 	vector<string> buffer;
-	int DataMode; // Bmp, BinaryData
+	int DataMode = 0; // BMP, BinaryData
 	// Read IndexFile
 	ifstream myfile(path + "\\index.txt");
 	if (myfile.is_open()) {

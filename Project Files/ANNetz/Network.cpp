@@ -15,7 +15,7 @@ Network::Network() {
 
 // In this network approach we fully interconnect Neurons in a layer by layer approach
 Network::Network(vector<int> neuronsPerLayer) {
-	int layerCount = neuronsPerLayer.size();
+	int layerCount = (int)neuronsPerLayer.size();
 	inputSize = neuronsPerLayer[0];
 	outputSize = neuronsPerLayer[layerCount - 1];
 	output = vector<double*>(outputSize);
@@ -78,7 +78,7 @@ void Network::backpropagate(std::vector<double*> target, double learnRate, doubl
 	}
 
 	if (learnRate != 0) {
-		for (int i = layers.size() - 2;i > 0;i--) {
+		for (int i = (int)layers.size() - 2;i > 0;i--) {
 			for (int j = 0;j < layers[i].size();j++) {
 				double bError = 0;
 				for (int k = 0;k < layers[i + 1].size();k++) {
@@ -121,7 +121,7 @@ double Network::trainOn(std::vector<std::vector<double*>> inputs, std::vector<st
 	double deviation = 0;
 	//[todo] give an maximum allowed error with the TrainOn call to decide whether this local minima is good or bad
 	for (int i = 0; i < iterations; i++) {
-		rnd = getRandomInt(0, inputs.size() - 1);
+		rnd = getRandomInt(0, (int)inputs.size() - 1);
 
 		input = inputs[rnd];
 		backpropagate(targets[rnd], lernrate / (i / 1000 + 1), 0.1);
@@ -135,8 +135,8 @@ double Network::trainOn(std::vector<std::vector<double*>> inputs, std::vector<st
 			if (i % 10000 == 0) {
 				// Random change
 				if (deviation <= 0.0001) {
-					rnd = getRandomInt(1, layers.size() - 1);
-					layers[rnd][getRandomInt(0, layers[rnd].size() - 1)]->changeARandomWeight();
+					rnd = getRandomInt(1, (int)layers.size() - 1);
+					layers[rnd][getRandomInt(0, (int)layers[rnd].size() - 1)]->changeARandomWeight();
 					cout << "Did random weight change" << endl;
 				}
 			}
@@ -144,7 +144,7 @@ double Network::trainOn(std::vector<std::vector<double*>> inputs, std::vector<st
 				// Jump
 				if (i % 1000 == 0) {
 					if (deviation <= 0.002) {
-						rnd = getRandomInt(0, inputs.size() - 1);
+						rnd = getRandomInt(0, (int)inputs.size() - 1);
 						cout << "Did Jump" << endl;
 						input = inputs[rnd];
 						backpropagate(targets[rnd], 2, 0);
