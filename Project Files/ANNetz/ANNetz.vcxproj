@@ -22,6 +22,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentManager.cpp" />
     <ClCompile Include="Connection.cpp" />
+    <ClCompile Include="DXManager.cpp" />
     <ClCompile Include="EasyBMP.cpp" />
     <ClCompile Include="Filter.cpp" />
     <ClCompile Include="DXFramework.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentManager.h" />
     <ClInclude Include="Connection.h" />
+    <ClInclude Include="DXManager.h" />
     <ClInclude Include="EasyBMP.h" />
     <ClInclude Include="Filter.h" />
     <ClInclude Include="DXFramework.h" />
