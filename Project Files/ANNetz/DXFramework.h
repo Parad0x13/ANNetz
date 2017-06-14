@@ -48,7 +48,7 @@ public:
 	ID3D11RenderTargetView* g_pRenderTargetView = NULL;
 
 	HRESULT initDevice();
-	void CleanupDevice();
+	void cleanupDevice();
 
 	void render();
 	bool initialize();

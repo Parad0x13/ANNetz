@@ -31,6 +31,7 @@ void DXFramework::begin() {
 		}
 		else {
 			// Update and render functions
+			//render();
 		}
 	}
 }
@@ -174,18 +175,17 @@ HRESULT DXFramework::initDevice() {
 	return S_OK;
 }
 
-void DXFramework::CleanupDevice() {
+void DXFramework::cleanupDevice() {
 	if (g_pImmediateContext) g_pImmediateContext->ClearState();
-
 	if (g_pRenderTargetView) g_pRenderTargetView->Release();
-	if (g_pSwapChain) g_pSwapChain->Release();
+	if (g_pSwapChain)        g_pSwapChain->Release();
 	if (g_pImmediateContext) g_pImmediateContext->Release();
-	if (g_pd3dDevice) g_pd3dDevice->Release();
+	if (g_pd3dDevice)        g_pd3dDevice->Release();
 }
 
 void DXFramework::render() {
 	// Just clear the backbuffer
-	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // Red, Green Blue, Alpha
-	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
+	float clearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // Red, Green Blue, Alpha
+	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, clearColor);
 	g_pSwapChain->Present(0, 0);
 }
