@@ -1,5 +1,8 @@
 #include <chrono>
 #include <iostream>
+#include <string>
+#include <Windows.h>
+
 
 #include "Utility.h"
 
@@ -87,4 +90,11 @@ std::string getHex(char c) {
 // [TODO] Decide if we want to remove this in favor of throwing exceptions only
 void error(std::string value) {
 	cout << "Error: " << value << endl;
+}
+
+std::string exePath() {
+	char buffer[MAX_PATH];
+	GetModuleFileName(NULL, buffer, MAX_PATH);
+	string::size_type pos = string(buffer).find_last_of("\\/");
+	return string(buffer).substr(0, pos);
 }

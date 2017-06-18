@@ -20,5 +20,5 @@ std::vector<std::string> splitString(std::string, char);
 std::string getHex(char);
 
 void error(std::string);
-
+std::string exePath();
 #endif

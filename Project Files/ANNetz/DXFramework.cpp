@@ -2,121 +2,345 @@
 #include "DXFramework.h"
 #include "global.h"
 
+
 using namespace std;
 
-LRESULT CALLBACK WndProc(HWND hwmd, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
 DXFramework::DXFramework() {
 	//
 }
 
 DXFramework::~DXFramework() {
-	if (FULL_SCREEN) {
-		ChangeDisplaySettings(NULL, 0);
-	}
-	UnregisterClass(applicationName, hInstance);
-	hInstance = NULL;
+
 }
 
-bool DXFramework::initialize() {
-	if (!createDXWindow("ANNetz DirectX Engine", WINDOW_POSX, WINDOW_POSY, SCREEN_WIDTH, SCREEN_HEIGHT))return false;
-	return true;
+HRESULT DXFramework::InitDevice() {
+	HRESULT hr = S_OK;
+
+	RECT rc;
+	GetClientRect(g_hWnd, &rc);
+	UINT width = rc.right - rc.left;
+	UINT height = rc.bottom - rc.top;
+
+	UINT createDeviceFlags = 0;
+#ifdef _DEBUG
+	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
+	D3D_DRIVER_TYPE driverTypes[] =
+	{
+		D3D_DRIVER_TYPE_HARDWARE,
+		D3D_DRIVER_TYPE_WARP,
+		D3D_DRIVER_TYPE_REFERENCE,
+	};
+	UINT numDriverTypes = ARRAYSIZE(driverTypes);
+
+	D3D_FEATURE_LEVEL featureLevels[] =
+	{
+		D3D_FEATURE_LEVEL_11_0,
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+	};
+	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+
+	DXGI_SWAP_CHAIN_DESC sd;
+	ZeroMemory(&sd, sizeof(sd));
+	sd.BufferCount = 1;
+	sd.BufferDesc.Width = width;
+	sd.BufferDesc.Height = height;
+	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.RefreshRate.Numerator = 60;
+	sd.BufferDesc.RefreshRate.Denominator = 1;
+	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.OutputWindow = g_hWnd;
+	sd.SampleDesc.Count = 1;
+	sd.SampleDesc.Quality = 0;
+	sd.Windowed = TRUE;
+
+	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
+	{
+		g_driverType = driverTypes[driverTypeIndex];
+		hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+			D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+		if (SUCCEEDED(hr))
+			break;
+	}
+	if (FAILED(hr))
+		return hr;
+
+	// Create a render target view
+	ID3D11Texture2D* pBackBuffer = NULL;
+	hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	if (FAILED(hr))
+		return hr;
+
+	hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
+	pBackBuffer->Release();
+	if (FAILED(hr))
+		return hr;
+
+	g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
+
+	// Setup the viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = (FLOAT)width;
+	vp.Height = (FLOAT)height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	g_pImmediateContext->RSSetViewports(1, &vp);
+
+	// Compile the vertex shader
+	ID3DBlob* pVSBlob = NULL;
+	string s = exePath() + "\\set.fx";
+	hr = CompileShaderFromFile(s.c_str(), "VS", "vs_4_0", &pVSBlob);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL,
+			"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
+		return hr;
+	}
+
+	// Create the vertex shader
+	hr = g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
+	if (FAILED(hr))
+	{
+		pVSBlob->Release();
+		return hr;
+	}
+
+	// Define the input layout
+	D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+	UINT numElements = ARRAYSIZE(layout);
+
+	// Create the input layout
+	hr = g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
+		pVSBlob->GetBufferSize(), &g_pVertexLayout);
+	pVSBlob->Release();
+	if (FAILED(hr))
+		return hr;
+
+	// Set the input layout
+	g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
+
+	// Compile the pixel shader
+	ID3DBlob* pPSBlob = NULL;
+	hr = CompileShaderFromFile(s.c_str(), "PS", "ps_4_0", &pPSBlob);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL,
+			"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", "Error", MB_OK);
+		return hr;
+	}
+
+	// Create the pixel shader
+	hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);
+	pPSBlob->Release();
+	if (FAILED(hr))
+		return hr;
+
+	// Create vertex buffer
+	vector<SimpleVertex> vertices = vector<SimpleVertex>(6);
+	vertices[0] = { XMFLOAT3(0.5f, 0.5f, 0.5f) };
+	vertices[1] = { XMFLOAT3(0.5f, -0.5f, 0.5f) };
+	vertices[2] = { XMFLOAT3(-0.5f, -0.5f, 0.5f) };
+
+	vertices[3] = { XMFLOAT3(-0.5f, 0.5f, 0.5f) };
+	vertices[4] = { XMFLOAT3(0.5f, 0.5f, 0.5f) };
+	vertices[5] = { XMFLOAT3(-0.5f, -0.5f, 0.5f) };
+
+
+	createVB(6 * sizeof(SimpleVertex));
+	refreshVBuffer(vertices);
+	
+	
+
+	// Set vertex buffer
+	UINT stride = sizeof(SimpleVertex);
+	UINT offset = 0;
+	g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
+
+	// Set primitive topology
+	g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	return S_OK;
 }
 
-void DXFramework::begin() {
-	MSG msg;
-	ZeroMemory(&msg, sizeof(MSG));
+void DXFramework::CleanupDevice() {
+	if (g_pImmediateContext) g_pImmediateContext->ClearState();
 
-	while (msg.message != WM_QUIT) {
-		if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else {
-			// Update and render functions
-			//render();
-		}
-	}
+	if (g_pVertexBuffer) g_pVertexBuffer->Release();
+	if (g_pVertexLayout) g_pVertexLayout->Release();
+	if (g_pVertexShader) g_pVertexShader->Release();
+	if (g_pPixelShader) g_pPixelShader->Release();
+	if (g_pRenderTargetView) g_pRenderTargetView->Release();
+	if (g_pSwapChain) g_pSwapChain->Release();
+	if (g_pImmediateContext) g_pImmediateContext->Release();
+	if (g_pd3dDevice) g_pd3dDevice->Release();
 }
 
-bool DXFramework::createDXWindow(char* windowTitle, int x, int y, int width, int height) {
-	HWND hwnd;
-	WNDCLASSEX wc;
-
-	applicationName = windowTitle;
-	hInstance = GetModuleHandle(NULL);
-
-	// Setup the windows class with default settings
-	wc.style			= CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wc.lpfnWndProc		= WndProc;
-	wc.cbClsExtra		= 0;
-	wc.cbWndExtra		= 0;
-	wc.hInstance		= hInstance;
-	wc.hIcon			= LoadIcon(NULL, IDI_WINLOGO);
-	wc.hIconSm			= wc.hIcon;
-	wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground	= (HBRUSH)GetStockObject(BLACK_BRUSH);
-	wc.lpszMenuName		= NULL;
-	wc.lpszClassName	= applicationName;
-	wc.cbSize			= sizeof(WNDCLASSEX);
-
-	if (!RegisterClassEx(&wc)) {
-		MessageBox(NULL, "RegisterClassEx() failed", "Error", MB_OK);
-		return false;
-	}
-
-	int nStyle = WS_OVERLAPPED | WS_SYSMENU | WS_VISIBLE
-		| WS_CAPTION | WS_MINIMIZEBOX;
-
-	// [TODO] Add fullscreen here
-	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-	if (FULL_SCREEN) {
-		DEVMODE dmScreenSettings;
-		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
-		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
-		dmScreenSettings.dmPelsWidth = (unsigned long)screenWidth;
-		dmScreenSettings.dmPelsHeight = (unsigned long)screenHeight;
-		dmScreenSettings.dmBitsPerPel = 32;
-		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-
-		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
-	}
-	else {
-		screenWidth = width;
-		screenHeight = height;
-	}
-
-	hwnd = CreateWindowEx(WS_EX_APPWINDOW, windowTitle, windowTitle, nStyle, x, y, width, height, NULL, NULL, hInstance, NULL);
-	if (hwnd == NULL) {
-		MessageBox(NULL, "CreateWindowEX() failed", "Error", MB_OK);
-		PostQuitMessage(0);
-		return false;
-	}
-
-	ShowWindow(hwnd, SW_SHOW);
-	SetForegroundWindow(hwnd);
-	SetFocus(hwnd);
-
-	return true;
-}
-
-LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	PAINTSTRUCT ps;
 	HDC hdc;
 
-	switch (message) {
-	case WM_PAINT: {
-		hdc = BeginPaint(hwnd, &ps);
-		EndPaint(hwnd, &ps);
-	}break;
-	case WM_CLOSE: {
+	switch (message)
+	{
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd, &ps);
+		EndPaint(hWnd, &ps);
+		break;
+
+	case WM_DESTROY:
 		PostQuitMessage(0);
-		DestroyWindow(hwnd);
-	}break;
-	default: {
-		return DefWindowProc(hwnd, message, wParam, lParam);
-	}}
+		break;
+
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
 
 	return 0;
+}
+
+void DXFramework::Render() {
+	// Clear the back buffer 
+	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
+	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
+
+	// Render a triangle
+	g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
+	g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
+	g_pImmediateContext->Draw(6, 0);
+
+	// Present the information rendered to the back buffer to the front buffer (the screen)
+	g_pSwapChain->Present(0, 0);
+}
+
+void DXFramework::createVB(int sizeInByte) {
+	
+	SimpleVertex vertices[] =
+	{
+		XMFLOAT3(1, 0, 0),
+		XMFLOAT3(0, 1, 0),
+		XMFLOAT3(-0.5f, -0.5f, 0.5f),
+
+		XMFLOAT3(-0.5f, 0.5f, 0.5f),
+		XMFLOAT3(0.5f, 0.5f, 0.5f),
+		XMFLOAT3(-0.5f, -0.5f, 0.5f),
+	};
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	InitData.pSysMem = vertices;
+
+	ZeroMemory(&desc, sizeof(desc));
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.ByteWidth = sizeInByte;
+	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	g_pd3dDevice->CreateBuffer(&desc, &InitData , &g_pVertexBuffer);
+}
+
+void DXFramework::refreshVBuffer(std::vector<SimpleVertex> vertices) {
+
+	D3D11_MAPPED_SUBRESOURCE resource;
+	g_pImmediateContext->Map(g_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	memcpy(resource.pData, (void*)&vertices[0], sizeof(SimpleVertex) * vertices.size());
+	g_pImmediateContext->Unmap(g_pVertexBuffer, 0);
+}
+
+int DXFramework::wWinMain(){
+
+	if (FAILED(InitWindow()))
+		return 0;
+
+	if (FAILED(InitDevice()))
+	{
+		CleanupDevice();
+		return 0;
+	}
+
+	// Main message loop
+	MSG msg = { 0 };
+	while (WM_QUIT != msg.message)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			Render();
+		}
+	}
+
+	CleanupDevice();
+
+	return (int)msg.wParam;
+}
+
+HRESULT DXFramework::InitWindow() {
+	HINSTANCE hInstance = GetModuleHandle(NULL);
+	// Register class
+	WNDCLASSEX wcex;
+	wcex.cbSize = sizeof(WNDCLASSEX);
+	wcex.style = CS_HREDRAW | CS_VREDRAW;
+	wcex.lpfnWndProc = WndProc;
+	wcex.cbClsExtra = 0;
+	wcex.cbWndExtra = 0;
+	wcex.hInstance = hInstance;
+	wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_TUTORIAL1);
+	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wcex.lpszMenuName = NULL;
+	wcex.lpszClassName = "GG";
+	wcex.hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_TUTORIAL1);
+	if (!RegisterClassEx(&wcex))
+		return E_FAIL;
+
+	// Create window
+	g_hInst = hInstance;
+	RECT rc = { WINDOW_POSX, WINDOW_POSY, SCREEN_WIDTH + WINDOW_POSX, SCREEN_HEIGHT + WINDOW_POSY };
+	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+	g_hWnd = CreateWindow("GG", "Life is EZ", WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance,
+		NULL);
+	if (!g_hWnd)
+		return E_FAIL;
+
+	ShowWindow(g_hWnd, SW_SHOW);
+
+	return S_OK;
+}
+
+HRESULT DXFramework::CompileShaderFromFile(LPCSTR szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut) {
+	HRESULT hr = S_OK;
+
+	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )
+	// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
+	// Setting this flag improves the shader debugging experience, but still allows 
+	// the shaders to be optimized and to run exactly the way they will run in 
+	// the release configuration of this program.
+	dwShaderFlags |= D3DCOMPILE_DEBUG;
+#endif
+
+	ID3DBlob* pErrorBlob;
+	hr = D3DX11CompileFromFile(szFileName, NULL, NULL, szEntryPoint, szShaderModel,
+		dwShaderFlags, 0, NULL, ppBlobOut, &pErrorBlob, NULL);
+	if (FAILED(hr))
+	{
+		if (pErrorBlob != NULL)
+			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+		if (pErrorBlob) pErrorBlob->Release();
+		return hr;
+	}
+	if (pErrorBlob) pErrorBlob->Release();
+
+	return S_OK;
 }

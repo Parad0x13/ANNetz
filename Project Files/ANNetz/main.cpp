@@ -5,10 +5,12 @@
 #include "Network.h"
 #include "ComponentManager.h"
 #include "DXFramework.h"
+#include "Utility.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
+
 	std::vector<::vector<double*>> inputs = std::vector<std::vector<double*>>(4);
 	std::vector<::vector<double*>> outputs = std::vector<std::vector<double*>>(4);
 
@@ -21,13 +23,15 @@ int main(int argc, char *argv[]) {
 	inputs[1][0]  = new double(0); inputs[1][1] = new double(1);
 	inputs[2][0]  = new double(1); inputs[2][1] = new double(0);
 	inputs[3][0]  = new double(1); inputs[3][1] = new double(1);
+
 	outputs[0][0] = new double(0);
 	outputs[1][0] = new double(1);
 	outputs[2][0] = new double(1);
 	outputs[3][0] = new double(0);
-
+	cout << exePath() << endl;
 	Network network = Network({2, 2, 1});
 
+	//cout << exePath() << endl;
 	cout << network << endl;
 
 	network.trainOn(inputs, outputs, 1000);
@@ -61,8 +65,6 @@ int main(int argc, char *argv[]) {
 	cm.getDataSet(currentDirectory);*/
 
 	DXFramework* framework = new DXFramework();
-	if (framework->initialize()) {
-		framework->begin();
-	}
+	framework->wWinMain();
 	delete framework;
 }
