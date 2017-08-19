@@ -21,3 +21,7 @@ Passthrough::~Passthrough() {
 void Passthrough::calcOut() {
 	output = input;
 }
+
+std::vector<SimpleVertex> Passthrough::getVertices() {
+	return std::vector<SimpleVertex>();
+}

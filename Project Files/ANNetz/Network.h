@@ -14,7 +14,10 @@ public:
 	Network(std::vector<int>);	// Standard layer by layer network
 	~Network();
 
+	//overrides
 	void calcOut();
+	std::vector<SimpleVertex> getVertices();
+
 	double trainOn(std::vector<std::vector<double*>>, std::vector<std::vector<double*>>, int);
 	// [TODO] In the future we should allow more complicated networks other than layer by layer
 	//			Possibly get rid of vector<vector<Neuron*>> in favor of connections only?

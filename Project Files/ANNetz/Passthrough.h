@@ -12,4 +12,5 @@ public:
 	~Passthrough();
 
 	void calcOut();
+	std::vector<SimpleVertex> getVertices();
 };

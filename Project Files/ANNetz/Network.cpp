@@ -112,6 +112,10 @@ void Network::calcOut() {
 	}
 }
 
+std::vector<SimpleVertex> Network::getVertices() {
+	return std::vector<SimpleVertex>();
+}
+
 double Network::trainOn(std::vector<std::vector<double*>> inputs, std::vector<std::vector<double*>> targets, int iterations) {
 	// [TODO] Do some cuda stuff over here
 	int rnd;

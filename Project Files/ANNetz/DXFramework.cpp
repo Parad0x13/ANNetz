@@ -157,8 +157,6 @@ HRESULT DXFramework::InitDevice() {
 
 	createVB(6 * sizeof(SimpleVertex));
 	refreshVBuffer(vertices);
-	
-	
 
 	// Set vertex buffer
 	UINT stride = sizeof(SimpleVertex);

@@ -16,6 +16,7 @@ public:
 
 	TransferFunction TF;
 	void calcOut();
+	std::vector<SimpleVertex> getVertices();
 	void refreshInputSize(int, int);
 
 private:

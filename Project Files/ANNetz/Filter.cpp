@@ -34,6 +34,12 @@ void Filter::calcOut() {
 	}
 }
 
+std::vector<SimpleVertex> Filter::getVertices() {
+
+	
+	return std::vector<SimpleVertex>();
+}
+
 void Filter::refreshInputSize(int _inX, int _inY) {
 	inX = _inX, inY = _inY;
 	if (featureX > inX || featureY > inY) throw new std::exception("FeatureSize is bigger then the InputSize");

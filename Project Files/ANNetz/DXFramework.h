@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "Utility.h"
+#include "global.h"
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -42,10 +43,6 @@ public:
 	~DXFramework();
 
 	int WINAPI wWinMain();
-
-	struct SimpleVertex {
-		XMFLOAT3 Pos;
-	};
 private:
 
 	HINSTANCE               g_hInst = NULL;
