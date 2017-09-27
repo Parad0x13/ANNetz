@@ -46,6 +46,7 @@
     <ClInclude Include="Neuron.h" />
     <ClInclude Include="Passthrough.h" />
     <ClInclude Include="Pooling.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>

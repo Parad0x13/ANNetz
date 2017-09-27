@@ -19,11 +19,18 @@ const bool VSYNC_ENABLED = true;
 
 struct SimpleVertex {
 	XMFLOAT3 Pos;
-	XMFLOAT4 Color;
+	XMFLOAT2 Tex;
 };
 
-struct ConstantBuffer {
-	XMMATRIX mWorld;
+struct CBNeverChanges {
 	XMMATRIX mView;
+};
+
+struct CBChangeOnResize {
 	XMMATRIX mProjection;
+};
+
+struct CBChangesEveryFrame {
+	XMMATRIX mWorld;
+	XMFLOAT4 vMeshColor;
 };

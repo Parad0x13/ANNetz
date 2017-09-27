@@ -61,14 +61,13 @@ void Neuron::adjustWeights(double lernRate, double momentum) {
 	double bufferDelta;
 
 	for (int j = 0; j < weights.size(); j++) {
-		bufferDelta = error * network->layers[layer - 1][j]->lastOutput * lernRate +momentum * previousWeightDelta[j];
-		weights[j] += bufferDelta;
-		previousWeightDelta[j] = bufferDelta;
+		previousWeightDelta[j] = error *  network->layers[layer - 1][j]->lastOutput* lernRate + 
+			momentum * previousWeightDelta[j];
+		weights[j] += previousWeightDelta[j];
 	}
 
-	bufferDelta = error * lernRate + momentum * previousBiasDelta;
-	bias += bufferDelta;
-	previousBiasDelta = bufferDelta;
+	previousBiasDelta = error * lernRate + momentum * previousBiasDelta;
+	bias += previousBiasDelta;
 }
 
 void Neuron::changeARandomWeight() {

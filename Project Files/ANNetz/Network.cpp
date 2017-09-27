@@ -128,7 +128,7 @@ double Network::trainOn(std::vector<std::vector<double*>> inputs, std::vector<st
 		rnd = getRandomInt(0, (int)inputs.size() - 1);
 
 		input = inputs[rnd];
-		backpropagate(targets[rnd], lernrate / (i / 1000 + 1), 0.1);
+		backpropagate(targets[rnd], 0.2f, 0.1f);
 		if (i % 100 == 0) {
 			currentError = AbsoluteError(inputs, targets);
 			deviation = fmax(bufferError, currentError) - fmin(bufferError, currentError);

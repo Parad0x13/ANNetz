@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 	//cout << exePath() << endl;
 	cout << network << endl;
 
-	network.trainOn(inputs, outputs, 1000);
+	network.trainOn(inputs, outputs, 10000);
 
 	cout << "Finished" << endl;
 
