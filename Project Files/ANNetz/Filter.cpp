@@ -35,8 +35,6 @@ void Filter::calcOut() {
 }
 
 std::vector<SimpleVertex> Filter::getVertices() {
-
-	
 	return std::vector<SimpleVertex>();
 }
 

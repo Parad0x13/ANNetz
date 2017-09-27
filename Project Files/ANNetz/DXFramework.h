@@ -57,6 +57,11 @@ private:
 	ID3D11PixelShader*      g_pPixelShader = NULL;
 	ID3D11InputLayout*      g_pVertexLayout = NULL;
 	ID3D11Buffer*           g_pVertexBuffer = NULL;
+	ID3D11Buffer*           g_pIndexBuffer = NULL;
+	ID3D11Buffer*           g_pConstantBuffer = NULL;
+	XMMATRIX                g_World;
+	XMMATRIX                g_View;
+	XMMATRIX                g_Projection;
 
 	D3D11_BUFFER_DESC desc;
 
