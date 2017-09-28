@@ -13,4 +13,5 @@ public:
 
 	void calcOut();
 	std::vector<SimpleVertex> getVertices();
+	std::vector<short> getIndices();
 };

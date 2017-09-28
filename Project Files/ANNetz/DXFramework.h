@@ -9,6 +9,7 @@
 
 #include "Utility.h"
 #include "global.h"
+#include "ComponentManager.h"
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -43,6 +44,9 @@ public:
 	~DXFramework();
 
 	int WINAPI wWinMain();
+
+	void RefreshData(ComponentManager*);
+	void RefreshPositions(ComponentManager*);
 private:
 
 	HINSTANCE                           g_hInst = NULL;
@@ -79,5 +83,7 @@ private:
 	void Render();
 
 	void createVB(int);
+	void createIB(int);
+
 	void refreshVBuffer(std::vector<SimpleVertex>);
 };

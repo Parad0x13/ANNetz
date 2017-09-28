@@ -12,6 +12,10 @@ public:
 	Pooling(int, int);
 	~Pooling();
 
+	//DX
+	std::vector<SimpleVertex> getVertices();
+	std::vector<short> getIndices();
+
 private:
 	int inX, inY;
 	int outX, outY;

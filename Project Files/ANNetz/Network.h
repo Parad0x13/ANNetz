@@ -16,7 +16,10 @@ public:
 
 	//overrides
 	void calcOut();
+
+	//DX
 	std::vector<SimpleVertex> getVertices();
+	std::vector<short> getIndices();
 
 	double trainOn(std::vector<std::vector<double*>>, std::vector<std::vector<double*>>, int);
 	// [TODO] In the future we should allow more complicated networks other than layer by layer

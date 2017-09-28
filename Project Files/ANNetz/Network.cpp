@@ -113,7 +113,17 @@ void Network::calcOut() {
 }
 
 std::vector<SimpleVertex> Network::getVertices() {
-	return std::vector<SimpleVertex>();
+	std::vector<SimpleVertex> ret = std::vector<SimpleVertex>(3);
+
+	ret[0] = { XMFLOAT3(-0.5f, 0, 0), XMFLOAT2(0.0f, 0.0f) };
+	ret[1] = { XMFLOAT3(0, 0.866f, 0), XMFLOAT2(1.0f, 0.0f) };
+	ret[2] = { XMFLOAT3(0.5f, 0, 0), XMFLOAT2(0.0f, 1.0f) };
+
+	return ret;
+}
+
+std::vector<short> Network::getIndices() {
+	return std::vector<short>();
 }
 
 double Network::trainOn(std::vector<std::vector<double*>> inputs, std::vector<std::vector<double*>> targets, int iterations) {
@@ -136,26 +146,26 @@ double Network::trainOn(std::vector<std::vector<double*>> inputs, std::vector<st
 			if (bufferError == 0) bufferError = currentError;
 			cout << "Itaration: " << i << "  \tAbsolut Error = " << currentError << "  \tDeviation: " << deviation << endl;
 
-			if (i % 10000 == 0) {
-				// Random change
-				if (deviation <= 0.0001) {
-					rnd = getRandomInt(1, (int)layers.size() - 1);
-					layers[rnd][getRandomInt(0, (int)layers[rnd].size() - 1)]->changeARandomWeight();
-					cout << "Did random weight change" << endl;
-				}
-			}
-			else {
-				// Jump
-				if (i % 1000 == 0) {
-					if (deviation <= 0.002) {
-						rnd = getRandomInt(0, (int)inputs.size() - 1);
-						cout << "Did Jump" << endl;
-						input = inputs[rnd];
-						backpropagate(targets[rnd], 2, 0);
-						i++;
-					}
-				}
-			}
+			//if (i % 10000 == 0) {
+			//	// Random change
+			//	if (deviation <= 0.0001) {
+			//		rnd = getRandomInt(1, (int)layers.size() - 1);
+			//		layers[rnd][getRandomInt(0, (int)layers[rnd].size() - 1)]->changeARandomWeight();
+			//		cout << "Did random weight change" << endl;
+			//	}
+			//}
+			//else {
+			//	// Jump
+			//	if (i % 1000 == 0) {
+			//		if (deviation <= 0.002) {
+			//			rnd = getRandomInt(0, (int)inputs.size() - 1);
+			//			cout << "Did Jump" << endl;
+			//			input = inputs[rnd];
+			//			backpropagate(targets[rnd], 2, 0);
+			//			i++;
+			//		}
+			//	}
+			//}
 		}
 
 		bufferError = currentError;

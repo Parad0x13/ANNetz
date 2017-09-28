@@ -16,7 +16,11 @@ public:
 
 	TransferFunction TF;
 	void calcOut();
+
+	//DX
 	std::vector<SimpleVertex> getVertices();
+	std::vector<short> getIndices();
+
 	void refreshInputSize(int, int);
 
 private:
