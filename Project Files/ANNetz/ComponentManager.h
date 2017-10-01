@@ -28,6 +28,11 @@ public:
 	std::vector<double*> calcOut(std::vector<double*>);
 	void setComponent(Component*, int, int);
 	void getDataSet(std::string);
+
+	std::vector<SimpleVertex> getVertices(std::vector<short>*);
+	std::vector<short> getIndices(std::vector<short>*);
+	std::vector<XMFLOAT3> getPositions();
+
 private:
 	int inputSize, OutputSize;
 

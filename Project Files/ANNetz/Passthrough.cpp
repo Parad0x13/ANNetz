@@ -33,5 +33,10 @@ std::vector<SimpleVertex> Passthrough::getVertices() {
 }
 
 std::vector<short> Passthrough::getIndices() {
-	return std::vector<short>();
+	std::vector<short> ret = std::vector<short>(3);
+	ret[0] = 0;
+	ret[1] = 1;
+	ret[2] = 2;
+
+	return ret;
 }

@@ -44,9 +44,6 @@ public:
 	~DXFramework();
 
 	int WINAPI wWinMain();
-
-	void RefreshData(ComponentManager*);
-	void RefreshPositions(ComponentManager*);
 private:
 
 	HINSTANCE                           g_hInst = NULL;
@@ -82,8 +79,17 @@ private:
 	void CleanupDevice();
 	void Render();
 
-	void createVB(int);
-	void createIB(int);
+	void createVB(std::vector<SimpleVertex>*);
+	void createIB(std::vector<short>*);
 
-	void refreshVBuffer(std::vector<SimpleVertex>);
+	void refreshVBuffer(std::vector<SimpleVertex>*);
+	void refreshIBuffer(std::vector<short>*);
+	void refreshPositions();
+
+	//components
+	ComponentManager cm = ComponentManager(2, 1, 3);
+	std::vector<short> vCount, iCount;
+	std::vector<XMFLOAT3> positions;
+
+	Network network = Network({ 2, 2, 1 });
 };

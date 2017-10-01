@@ -7,14 +7,57 @@ using namespace std;
 
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
+//constructor
 DXFramework::DXFramework() {
-	//
+	//Create Data, train on it and recreate cm
+	std::vector<::vector<double*>> inputs = std::vector<std::vector<double*>>(4);
+	std::vector<::vector<double*>> outputs = std::vector<std::vector<double*>>(4);
+
+	for (int i = 0; i < 4; i++) {
+		inputs[i] = vector<double*>(2);
+		outputs[i] = vector<double*>(1);
+	}
+
+	inputs[0][0] = new double(0); inputs[0][1] = new double(0);
+	inputs[1][0] = new double(0); inputs[1][1] = new double(1);
+	inputs[2][0] = new double(1); inputs[2][1] = new double(0);
+	inputs[3][0] = new double(1); inputs[3][1] = new double(1);
+
+	outputs[0][0] = new double(0);
+	outputs[1][0] = new double(1);
+	outputs[2][0] = new double(1);
+	outputs[3][0] = new double(0);
+
+	cout << network << endl;
+
+	network.trainOn(inputs, outputs, 1000);
+
+	cout << "Finished" << endl;
+
+	for (int i = 0; i < 4; i++) {
+		network.setInput(0, inputs[i]);
+		network.calcOut();
+		cout << *inputs[i][0] << *inputs[i][1] << " ";
+		cout << *network.output[0] << endl;
+	}
+
+	cout << "initalize CNN" << endl;
+	cm = ComponentManager(2, 1, 3);	// insize, outsize, length
+	cm.setComponent(&network, 1, 0);
+
+	cout << "Finished" << endl;
+
+	for (int i = 0; i < 4; i++) {
+		cout << *inputs[i][0] << *inputs[i][1] << " ";
+		cout << *cm.calcOut(inputs[i])[0] << endl;
+	}
 }
 
 DXFramework::~DXFramework() {
 
 }
 
+//initalizing
 HRESULT DXFramework::InitDevice() {
 	HRESULT hr = S_OK;
 
@@ -173,16 +216,6 @@ HRESULT DXFramework::InitDevice() {
 	if (FAILED(hr))
 		return hr;
 
-	// Create vertex buffer
-	createVB(24);
-
-	// Set vertex buffer
-	UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;
-	g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
-
-	// Create index buffer
-	createIB(36);
 
 	// Set primitive topology
 	g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -234,7 +267,7 @@ HRESULT DXFramework::InitDevice() {
 
 	// Initialize the view matrix
 	XMVECTOR Eye = XMVectorSet(0.0f, 3.0f, -6.0f, 0.0f);
-	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	g_View = XMMatrixLookAtLH(Eye, At, Up);
 
@@ -285,208 +318,6 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	}
 
 	return 0;
-}
-
-void DXFramework::Render() {
-	// Update our time
-	static float t = 0.0f;
-	if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
-	{
-		t += (float)XM_PI * 0.0125f;
-	}
-	else
-	{
-		static DWORD dwTimeStart = 0;
-		DWORD dwTimeCur = GetTickCount();
-		if (dwTimeStart == 0)
-			dwTimeStart = dwTimeCur;
-		t = (dwTimeCur - dwTimeStart) / 1000.0f;
-	}
-
-	// Rotate cube around the origin
-	g_World = XMMatrixRotationY(t);
-
-	// Modify the color
-	g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
-	g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
-	g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
-
-	//
-	// Clear the back buffer
-	//
-	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
-	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
-
-	//
-	// Clear the depth buffer to 1.0 (max depth)
-	//
-	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-	//
-	// Update variables that change once per frame
-	//
-	CBChangesEveryFrame cb;
-	cb.mWorld = XMMatrixTranspose(g_World);
-	cb.vMeshColor = g_vMeshColor;
-	g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
-
-	//
-	// Render the cube
-	//
-	g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
-	g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
-	g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
-	g_pImmediateContext->VSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
-	g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
-	g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
-	g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
-	g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
-	g_pImmediateContext->DrawIndexed(36, 0, 0);
-
-	//
-	// Present our back buffer to our front buffer
-	//
-	g_pSwapChain->Present(0, 0);
-}
-
-void DXFramework::createVB(int vCount) {
-	
-	//simple cube mesh
-	SimpleVertex vertices[] =
-	{
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
-
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
-	};
-
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = std::_Max_value(24, vCount) * sizeof(SimpleVertex);
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertices;
-
-	g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
-}
-
-void DXFramework::createIB(int iCount) {
-	WORD indices[] =
-	{
-		3,1,0,
-		2,1,3,
-
-		6,4,5,
-		7,4,6,
-
-		11,9,8,
-		10,9,11,
-
-		14,12,13,
-		15,12,14,
-
-		19,17,16,
-		18,17,19,
-
-		22,20,21,
-		23,20,22
-	};
-
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = std::_Max_value(36, iCount) * sizeof(WORD);
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = indices;
-
-	//Create index buffer
-	g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
-
-	// Set index buffer
-	g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-}
-
-void DXFramework::refreshVBuffer(std::vector<SimpleVertex> vertices) {
-	D3D11_MAPPED_SUBRESOURCE resource;
-	g_pImmediateContext->Map(g_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, (void*)&vertices[0], sizeof(SimpleVertex) * vertices.size());
-	g_pImmediateContext->Unmap(g_pVertexBuffer, 0);
-}
-
-int DXFramework::wWinMain(){
-
-	if (FAILED(InitWindow()))
-		return 0;
-
-	if (FAILED(InitDevice()))
-	{
-		CleanupDevice();
-		return 0;
-	}
-
-	// Main message loop
-	MSG msg = { 0 };
-	while (WM_QUIT != msg.message)
-	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			Render();
-		}
-	}
-
-	CleanupDevice();
-
-	return (int)msg.wParam;
-}
-
-//[TODO] copy all vertices and String Info from the components over here
-void DXFramework::RefreshData(ComponentManager* Cm) {
-	
-}
-
-//[TODO] copy all Positions from components over here and save them as WorldMatrix
-void DXFramework::RefreshPositions(ComponentManager *) {
-
 }
 
 HRESULT DXFramework::InitWindow() {
@@ -549,3 +380,195 @@ HRESULT DXFramework::CompileShaderFromFile(LPCSTR szFileName, LPCSTR szEntryPoin
 
 	return S_OK;
 }
+
+//Buffer
+void DXFramework::createVB(std::vector<SimpleVertex>* vertices) {
+
+	//simple cube mesh
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+
+
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.Usage = D3D11_USAGE_DYNAMIC;
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bd.ByteWidth = vertices->size() * sizeof(SimpleVertex);
+	bd.MiscFlags = 0;
+	bd.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	InitData.pSysMem = &vertices[0][0];
+
+	g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
+
+
+	UINT stride = sizeof(SimpleVertex);
+	UINT offset = 0;
+	g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
+}
+
+void DXFramework::createIB(std::vector<short>* indices) {
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+
+	bd.Usage = D3D11_USAGE_DYNAMIC;
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bd.ByteWidth = indices->size() * sizeof(short);
+	bd.MiscFlags = 0;
+	bd.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	InitData.pSysMem = &indices[0][0];
+
+	//Create index buffer
+	g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
+
+	// Set index buffer
+	g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+}
+
+void DXFramework::refreshVBuffer(std::vector<SimpleVertex>* vertices) {
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	//	Disable GPU access to the vertex buffer data.
+	g_pImmediateContext->Map(g_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	//	Update the vertex buffer here.
+
+	memcpy(mappedResource.pData, &vertices[0][0], sizeof(SimpleVertex) * 3);
+	//	Reenable GPU access to the vertex buffer data.
+	g_pImmediateContext->Unmap(g_pVertexBuffer, 0);
+}
+
+void DXFramework::refreshIBuffer(std::vector<short>* indices) {
+	D3D11_MAPPED_SUBRESOURCE resource;
+	g_pImmediateContext->Map(g_pIndexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	memcpy(resource.pData, &indices[0][0], sizeof(short) * indices->size());
+	g_pImmediateContext->Unmap(g_pIndexBuffer, 0);
+}
+
+//Rendering
+int DXFramework::wWinMain() {
+
+	if (FAILED(InitWindow()))
+		return 0;
+
+	if (FAILED(InitDevice()))
+	{
+		CleanupDevice();
+		return 0;
+	}
+
+	//initDxStuff
+	std::vector<short> indices = cm.getIndices(&iCount);
+	std::vector<SimpleVertex> vertices = cm.getVertices(&vCount);
+
+	//resizeing buffer
+	createIB(&indices);
+	createVB(&vertices);
+
+
+	//setting data
+	//refreshVBuffer(&vertices);
+	//refreshIBuffer(&indices);
+
+	refreshPositions();
+
+	// Main message loop
+	MSG msg = { 0 };
+	while (WM_QUIT != msg.message)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			Render();
+		}
+	}
+
+	CleanupDevice();
+
+	return (int)msg.wParam;
+}
+
+void DXFramework::Render() {
+
+	// Update our time
+	static float t = 0.0f;
+	if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+	{
+		t += (float)XM_PI * 0.0125f;
+	}
+	else
+	{
+		static DWORD dwTimeStart = 0;
+		DWORD dwTimeCur = GetTickCount();
+		if (dwTimeStart == 0)
+			dwTimeStart = dwTimeCur;
+		t = (dwTimeCur - dwTimeStart) / 1000.0f;
+	}
+
+	// Rotate cube around the origin
+	g_World = XMMatrixRotationY(t);
+	//g_World *= XMMatrixTranslation(2, 0, 5);
+
+	// Modify the color
+	g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
+	g_vMeshColor.y = (cosf(t * 3.0f) + 1.0f) * 0.5f;
+	g_vMeshColor.z = (sinf(t * 5.0f) + 1.0f) * 0.5f;
+
+	//
+	// Clear the back buffer
+	//
+	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red, green, blue, alpha
+	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
+
+	//
+	// Clear the depth buffer to 1.0 (max depth)
+	//
+	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	//
+	// Update variables that change once per frame
+	//
+
+	//Render
+	g_pImmediateContext->VSSetShader(g_pVertexShader, NULL, 0);
+	g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pCBNeverChanges);
+	g_pImmediateContext->VSSetConstantBuffers(1, 1, &g_pCBChangeOnResize);
+	g_pImmediateContext->VSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+	g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
+	g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
+	g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
+	g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
+
+	CBChangesEveryFrame cb;
+	short iStart = 0, vStart = 0;
+	for (int i = 0; i < iCount.size(); i++) {
+
+		g_World = XMMatrixRotationY(t);
+		g_World *= XMMatrixTranslation(positions[i].x, positions[i].y, positions[i].z);
+		cb.mWorld = XMMatrixTranspose(g_World);
+		cb.vMeshColor = g_vMeshColor;
+		g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
+
+
+		g_pImmediateContext->DrawIndexed(iCount[i], iStart, vStart);
+		iStart += iCount[i];
+		vStart += vCount[i];
+	}
+
+	//
+	// Present our back buffer to our front buffer
+	//
+	g_pSwapChain->Present(0, 0);
+}
+
+void DXFramework::refreshPositions() {
+	positions = cm.getPositions();	
+}
+

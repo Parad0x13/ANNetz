@@ -9,11 +9,11 @@ ComponentManager::ComponentManager(int inSize, int outSize, int Length) : inputS
 	for (int i = 0; i < Length; i++) {
 		components[i] = vector<Component*>(1);
 
-		if(i == 0) components[i][0] = new Passthrough(inputSize);
+		if (i == 0) components[i][0] = new Passthrough(inputSize);
 		else {
 			if (i == Length - 1) components[i][0] = new Passthrough(OutputSize);
 			else components[i][0] = new Passthrough(1);
-		}	
+		}
 	}
 
 	for (int i = 0; i < Length - 1; i++) {
@@ -117,6 +117,48 @@ void ComponentManager::getDataSet(std::string path) {
 		}
 	}
 
+}
+
+std::vector<SimpleVertex> ComponentManager::getVertices(std::vector<short>* VCount) {
+	std::vector<SimpleVertex> ret, buffer;
+
+	for (int layer = 0; layer < components.size(); layer++) {
+		for (int index = 0; index < components[layer].size(); index++) {
+			buffer = components[layer][index]->getVertices();
+			VCount->push_back(buffer.size());
+			for (int i = 0; i < buffer.size(); i++)
+				ret.push_back(buffer[i]);
+		}
+	}
+
+	return ret;
+}
+
+std::vector<short> ComponentManager::getIndices(std::vector<short>* iCount) {
+	std::vector<short> ret, buffer;
+
+	for (int layer = 0; layer < components.size(); layer++) {
+		for (int index = 0; index < components[layer].size(); index++) {
+			buffer = components[layer][index]->getIndices();
+			iCount->push_back(buffer.size());
+			for (int i = 0; i < buffer.size(); i++)
+				ret.push_back(buffer[i]);
+		}
+	}
+
+	return ret;
+}
+
+std::vector<XMFLOAT3> ComponentManager::getPositions() {
+	std::vector<XMFLOAT3> ret;
+	
+	for (int layer = 0; layer < components.size(); layer++) {
+		for (int index = 0; index < components[layer].size(); index++) {
+			ret.push_back(XMFLOAT3(layer, index, 0));
+		}
+	}
+
+	return ret;
 }
 
 std::vector<double*> ComponentManager::BMToArray(std::string path, BmChannelFilter bmc) {

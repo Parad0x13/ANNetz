@@ -8,7 +8,6 @@ public:
 	Component() {};
 	int inputSize, outputSize;
 	std::vector<double*> output;
-	SimpleVertex pos;
 
 	void setInput(int, std::vector<double*>);
 	virtual void calcOut() = 0; // Implied  [0, 1]
