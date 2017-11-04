@@ -13,5 +13,4 @@ public:
 	void setPreviousLayer(BATLayer *layer);
 
 	std::vector<BATNode *> nodes;
-	std::vector<std::vector<double>> weights;
 };
