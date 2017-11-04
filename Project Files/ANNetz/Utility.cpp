@@ -1,5 +1,6 @@
 #include <chrono>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <Windows.h>
 
@@ -22,12 +23,12 @@ string generateRandomTag(int len, string available) {
 }
 
 int currentTagIndex = -1;
-std::string generateTag(int len, string available) {
+string generateTag(int len, string available) {
 	currentTagIndex++;
 	return getTag(currentTagIndex, len);
 }
 
-std::string getTag(int index, int len, string available) {
+string getTag(int index, int len, string available) {
 	string ret = "";
 	int buffer = 0, basis;
 
@@ -57,19 +58,19 @@ int getRandomInt(int _inclusiveLowerLimit, int inclusiveUpperLimit) {
 	return distribution(random_engine);
 }
 
-std::vector<std::string> splitString(std::string s, char c) {
-	std::vector<string> elems;
-	std::stringstream ss(s);
-	std::string number;
+vector<string> splitString(string s, char c) {
+	vector<string> elems;
+	stringstream ss(s);
+	string number;
 
-	while (std::getline(ss, number, c)) {
+	while (getline(ss, number, c)) {
 		elems.push_back(number);
 	}
 
 	return elems;
 }
 
-std::string getHex(char c) {
+string getHex(char c) {
 	string chars = "0123456789ABCDEF";
 	string retVal = "";
 	int val = (int)c;
@@ -87,13 +88,25 @@ std::string getHex(char c) {
 }
 
 // [TODO] Decide if we want to remove this in favor of throwing exceptions only
-void error(std::string value) {
+void error(string value) {
 	cout << "Error: " << value << endl;
 }
 
-std::string exePath() {
+string exePath() {
 	char buffer[MAX_PATH];
 	GetModuleFileName(NULL, buffer, MAX_PATH);
 	string::size_type pos = string(buffer).find_last_of("\\/");
 	return string(buffer).substr(0, pos);
+}
+
+vector<vector<string>> dataFromCSV(string filename) {
+	vector<vector<string>> retVal;
+
+	ifstream infile(filename);
+	for (string line;getline(infile, line);) {
+		vector<string> lineData = splitString(line, ',');
+		retVal.push_back(lineData);
+	}
+
+	return retVal;
 }

@@ -1,11 +1,12 @@
 #pragma once
+#include <string>
 
 class BATNet {
 public:
 	BATNet();
 	~BATNet();
 
-	void setClassifier(int dataPointCount, int classIndex);
+	void setClassifier(std::string, int, int);		// Assumes dataPoints preceed classIndex
 	// Need start layer
 	// Need hidden layer
 	// Need end layer

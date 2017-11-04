@@ -2,7 +2,6 @@
 #define UTILITY_H
 
 #include <random>
-#include <string.h>
 #include <string>
 #include <vector>
 #include <sstream>
@@ -21,4 +20,8 @@ std::string getHex(char);
 
 void error(std::string);
 std::string exePath();
+
+#pragma Helpful file management methods here
+std::vector<std::vector<std::string>> dataFromCSV(std::string);
+
 #endif

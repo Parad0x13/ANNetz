@@ -1,14 +1,16 @@
 #include <iostream>
 #include <vector>
-//#include <Windows.h>
+#include <Windows.h>
 
-//#include "Network.h"
-//#include "ComponentManager.h"
-//#include "DXFramework.h"
+#include "Network.h"
+#include "ComponentManager.h"
+#include "DXFramework.h"
 #include "Utility.h"
 #include "BATNet.h"
 
 using namespace std;
+
+// [NOTE] Ctrl+F5 runs build, run, system("PAUSE") automatically, will run previous success if build fails though so watch out
 
 int main(int argc, char *argv[]) {
 	// [TODO] We need to find a better way of doing this...
@@ -27,4 +29,5 @@ int main(int argc, char *argv[]) {
 	delete framework;*/
 
 	BATNet *batnet = new BATNet();
+	batnet->setClassifier("irisData.txt", 4, 5);
 }
