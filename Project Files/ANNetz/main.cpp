@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
-#include <Windows.h>
+//#include <Windows.h>
 
-#include "Network.h"
-#include "ComponentManager.h"
-#include "DXFramework.h"
+//#include "Network.h"
+//#include "ComponentManager.h"
+//#include "DXFramework.h"
 #include "Utility.h"
+#include "BATNet.h"
 
 using namespace std;
 
@@ -24,4 +25,6 @@ int main(int argc, char *argv[]) {
 	DXFramework *framework = new DXFramework();
 	framework->wWinMain();
 	delete framework;*/
+
+	BATNet *batnet = new BATNet();
 }
