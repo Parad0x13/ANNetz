@@ -9,7 +9,7 @@ BATLayer::BATLayer(int nodeSize) {
 	for (int d = 0;d < nodeSize;d++) {
 		BATNode *node = new BATNode();
 		nodes.push_back(node);
-		nextLayer = NULL;
+		previousLayer = NULL;
 	}
 }
 
@@ -32,14 +32,15 @@ void BATLayer::render(string prefix) {
 	}
 }
 
-void BATLayer::setNextLayer(BATLayer *layer) {
-	nextLayer = layer;
+void BATLayer::setPreviousLayer(BATLayer *layer) {
+	previousLayer = layer;
 
-	// [TODO] Make sure self.weights is empty first
+	weights.clear();
 	for (BATNode *node : nodes) {
 		vector<double> nodeWeights;
-		for (BATNode *otherNode : layer->nodes)
+		for (BATNode *previousNode : previousLayer->nodes) {
 			nodeWeights.push_back(getRandomDouble(0, 1));
+		}
 		weights.push_back(nodeWeights);
 	}
 }

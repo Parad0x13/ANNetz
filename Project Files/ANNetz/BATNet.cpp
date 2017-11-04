@@ -42,7 +42,7 @@ void BATNet::addLayer(int nodeSize) {
 	layers.push_back(layer);
 
 	if (previousLayer != NULL) {
-		previousLayer->setNextLayer(layer);
+		layer->setPreviousLayer(previousLayer);
 	}
 }
 
