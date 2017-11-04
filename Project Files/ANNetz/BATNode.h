@@ -6,7 +6,7 @@ public:
 	BATNode();
 	~BATNode();
 
-	void render();
+	void render(std::string prefix = "        [BATNode]");
 
 	double value, weight, bias;
 };

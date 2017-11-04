@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 
 #include "BATNode.h"
 
@@ -8,7 +9,7 @@ public:
 	BATLayer(int);
 	~BATLayer();
 
-	void render();
+	void render(std::string = "    [BATLayer]");
 
 	std::vector<BATNode *> nodes;
 };

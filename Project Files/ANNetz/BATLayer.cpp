@@ -15,8 +15,8 @@ BATLayer::~BATLayer() {
 	//
 }
 
-void BATLayer::render() {
-	cout << "[BATLayer]" << endl;
+void BATLayer::render(string prefix) {
+	cout << prefix << endl;
 	for (BATNode *node : nodes) {
 		node->render();
 	}

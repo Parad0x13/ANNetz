@@ -14,7 +14,8 @@ BATNet::~BATNet() {
 	//
 }
 
-void BATNet::render() {
+void BATNet::render(string prefix) {
+	cout << prefix << endl;
 	for (BATLayer *layer : layers) {
 		layer->render();
 	}

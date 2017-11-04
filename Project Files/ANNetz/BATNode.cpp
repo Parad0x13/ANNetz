@@ -16,6 +16,6 @@ BATNode::~BATNode() {
 	//
 }
 
-void BATNode::render() {
-	cout << fixed << setprecision(3) << "[BATNode] value:" << value << "\t\tweight: " << weight << "\t\tbias:" << bias << endl;
+void BATNode::render(string prefix) {
+	cout << fixed << setprecision(3) << prefix << " value:" << value << "\t\tweight: " << weight << "\t\tbias:" << bias << endl;
 }

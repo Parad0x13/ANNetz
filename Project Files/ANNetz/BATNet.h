@@ -9,7 +9,7 @@ public:
 	BATNet();
 	~BATNet();
 
-	void render();
+	void render(std::string = "[BATNet]");
 	void setDataToClassify(std::string, int, int);		// Assumes all dataPoints preceed classIndex
 	void addLayer(int);
 
