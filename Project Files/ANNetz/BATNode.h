@@ -8,5 +8,5 @@ public:
 
 	void render(std::string prefix = "        [BATNode]");
 
-	double value, weight, bias;
+	double value, bias;
 };

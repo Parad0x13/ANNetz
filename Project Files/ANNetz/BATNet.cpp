@@ -35,8 +35,15 @@ void BATNet::setDataToClassify(string filename, int dataPointCount, int classInd
 }
 
 void BATNet::addLayer(int nodeSize) {
+	BATLayer *previousLayer = NULL;
+	if (layers.size() > 0) previousLayer = layers.back();
+
 	BATLayer *layer = new BATLayer(nodeSize);
 	layers.push_back(layer);
+
+	if (previousLayer != NULL) {
+		previousLayer->setNextLayer(layer);
+	}
 }
 
 void BATNet::learn(int iterations) {
