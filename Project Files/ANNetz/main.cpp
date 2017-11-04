@@ -33,5 +33,6 @@ int main(int argc, char *argv[]) {
 	net->addLayer(4);
 	net->addLayer(6);
 	net->addLayer(3);
+	net->learn(1);
 	net->render();
 }

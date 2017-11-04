@@ -38,3 +38,18 @@ void BATNet::addLayer(int nodeSize) {
 	BATLayer *layer = new BATLayer(nodeSize);
 	layers.push_back(layer);
 }
+
+void BATNet::learn(int iterations) {
+	for (int iter = 0;iter < iterations;iter++) {
+		// First we setup the input layer nodes
+		vector<double> dataPoint = classifyData[0];				// [TODO] Should be random
+		// [TODO] Should add error checking here...
+		BATLayer *layer = layers[0];
+		int dataPointIndex = 0;
+		for (BATNode *node : layer->nodes) {
+			node->value = dataPoint[dataPointIndex++];
+		}
+
+		// Now we run everything through, feed-forward
+	}
+}
