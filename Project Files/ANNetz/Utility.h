@@ -15,6 +15,7 @@ std::string getTag(int, int, std::string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 double normalDistribution();
 int getRandomInt(int, int);
+double getRandomDouble(double, double);
 std::vector<std::string> splitString(std::string, char);
 std::string getHex(char);
 

@@ -28,6 +28,10 @@ int main(int argc, char *argv[]) {
 	framework->wWinMain();
 	delete framework;*/
 
-	BATNet *batnet = new BATNet();
-	batnet->setClassifier("irisData.txt", 4, 5);
+	BATNet *net = new BATNet();
+	net->setDataToClassify("irisData.txt", 4, 5);
+	net->addLayer(4);
+	net->addLayer(6);
+	net->addLayer(3);
+	net->render();
 }

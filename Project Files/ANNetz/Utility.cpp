@@ -45,6 +45,7 @@ string getTag(int index, int len, string available) {
 	return ret;
 }
 
+// [TODO] Does this even work? And how does it work?
 double normalDistribution() {
 	uniform_real_distribution<double> distribution(0, 1);
 	double u1 = distribution(random_engine);
@@ -53,8 +54,16 @@ double normalDistribution() {
 	return sqrt(-2 * log(u1)) * cos(2 * 3.141592 * u2);
 }
 
+// [TODO] Why does _inclusiveLowerLimit have a prefix-underscore?
 int getRandomInt(int _inclusiveLowerLimit, int inclusiveUpperLimit) {
 	uniform_int_distribution<int> distribution(_inclusiveLowerLimit, inclusiveUpperLimit);
+	return distribution(random_engine);
+}
+
+// [TODO] Are the bounds inclusive?
+// [TODO] Is this just a close duplicate of normalDistribution()
+double getRandomDouble(double lowerBound, double upperBound) {
+	uniform_real_distribution<double> distribution(0, 1);
 	return distribution(random_engine);
 }
 

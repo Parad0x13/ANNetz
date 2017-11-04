@@ -14,13 +14,26 @@ BATNet::~BATNet() {
 	//
 }
 
-void BATNet::setClassifier(string filename, int dataPointCount, int classIndex) {
+void BATNet::render() {
+	for (BATLayer *layer : layers) {
+		layer->render();
+	}
+}
+
+void BATNet::setDataToClassify(string filename, int dataPointCount, int classIndex) {
 	vector<vector<string>> data = dataFromCSV(filename);
 
 	for (vector<string> line : data) {
+		vector<double> lineData;
 		for (string dataPointAndIndex : line) {
-			cout << dataPointAndIndex << " ";
+			double value = stod(dataPointAndIndex);
+			lineData.push_back(value);
 		}
-		cout << endl;
+		classifyData.push_back(lineData);
 	}
+}
+
+void BATNet::addLayer(int nodeSize) {
+	BATLayer *layer = new BATLayer(nodeSize);
+	layers.push_back(layer);
 }
