@@ -2,12 +2,10 @@
 #include "DXFramework.h"
 #include "global.h"
 
-
 using namespace std;
 
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
-//constructor
 DXFramework::DXFramework() {
 	//Create Data, train on it and recreate cm
 	std::vector<::vector<double*>> inputs = std::vector<std::vector<double*>>(4);
@@ -54,7 +52,7 @@ DXFramework::DXFramework() {
 }
 
 DXFramework::~DXFramework() {
-
+	//
 }
 
 //initalizing
@@ -571,4 +569,3 @@ void DXFramework::Render() {
 void DXFramework::refreshPositions() {
 	positions = cm.getPositions();	
 }
-
