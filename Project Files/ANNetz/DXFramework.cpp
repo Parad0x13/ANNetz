@@ -166,7 +166,7 @@ HRESULT DXFramework::InitDevice() {
 	// Compile the vertex shader
 	ID3DBlob* pVSBlob = NULL;
 	string s = exePath() + "\\set.fx";
-	hr = CompileShaderFromFile(s.c_str(), "VS", "vs_4_0", &pVSBlob);
+	hr = CompileShaderFromFile("set.fx", "VS", "vs_4_0", &pVSBlob);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL,
@@ -202,7 +202,7 @@ HRESULT DXFramework::InitDevice() {
 
 	// Compile the pixel shader
 	ID3DBlob* pPSBlob = NULL;
-	hr = CompileShaderFromFile(s.c_str(), "PS", "ps_4_0", &pPSBlob);
+	hr = CompileShaderFromFile("set.fx", "PS", "ps_4_0", &pPSBlob);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL,

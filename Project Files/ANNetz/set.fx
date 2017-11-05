@@ -26,7 +26,6 @@ cbuffer cbChangesEveryFrame : register( b2 )
     float4 vMeshColor;
 };
 
-
 //--------------------------------------------------------------------------------------
 struct VS_INPUT
 {
@@ -39,7 +38,6 @@ struct PS_INPUT
     float4 Pos : SV_POSITION;
     float2 Tex : TEXCOORD0;
 };
-
 
 //--------------------------------------------------------------------------------------
 // Vertex Shader
@@ -54,7 +52,6 @@ PS_INPUT VS( VS_INPUT input )
     
     return output;
 }
-
 
 //--------------------------------------------------------------------------------------
 // Pixel Shader

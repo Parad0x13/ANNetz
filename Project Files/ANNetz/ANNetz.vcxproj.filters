@@ -112,22 +112,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="0.bmp">
+    <Image Include="textures\Filter.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="1.bmp">
+    <Image Include="textures\Network.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="2.bmp">
+    <Image Include="textures\PassThrough.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="3.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="4.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="5.bmp">
+    <Image Include="textures\Pooling.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -138,5 +132,10 @@
     <Text Include="irisData.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="set.fx">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
