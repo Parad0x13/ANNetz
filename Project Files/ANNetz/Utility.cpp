@@ -63,7 +63,7 @@ int getRandomInt(int _inclusiveLowerLimit, int inclusiveUpperLimit) {
 // [TODO] Are the bounds inclusive?
 // [TODO] Is this just a close duplicate of normalDistribution()
 double getRandomDouble(double lowerBound, double upperBound) {
-	uniform_real_distribution<double> distribution(0, 1);
+	uniform_real_distribution<double> distribution(lowerBound, upperBound);
 	return distribution(random_engine);
 }
 

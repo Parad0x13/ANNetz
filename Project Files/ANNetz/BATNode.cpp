@@ -30,7 +30,8 @@ void BATNode::setPreviousLayer(BATLayer *layer) {
 	previousLayer = layer;
 
 	for (BATNode *previousNode : previousLayer->nodes) {
-		weights.push_back(getRandomDouble(0, 1));
+		double value = getRandomDouble(-1, 1);
+		weights.push_back(value);
 	}
 }
 
