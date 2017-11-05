@@ -1,14 +1,12 @@
 #include <chrono>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <Windows.h>
 
-
 #include "Utility.h"
 
-
 using namespace std;
-
 
 // It's important to seed our random generator w/ system clock. Perfectly uniform distribution is achieved here.
 default_random_engine random_engine((unsigned int)chrono::system_clock::now().time_since_epoch().count());
@@ -25,12 +23,12 @@ string generateRandomTag(int len, string available) {
 }
 
 int currentTagIndex = -1;
-std::string generateTag(int len, string available) {
+string generateTag(int len, string available) {
 	currentTagIndex++;
 	return getTag(currentTagIndex, len);
 }
 
-std::string getTag(int index, int len, string available) {
+string getTag(int index, int len, string available) {
 	string ret = "";
 	int buffer = 0, basis;
 
@@ -47,6 +45,7 @@ std::string getTag(int index, int len, string available) {
 	return ret;
 }
 
+// [TODO] Does this even work? And how does it work?
 double normalDistribution() {
 	uniform_real_distribution<double> distribution(0, 1);
 	double u1 = distribution(random_engine);
@@ -55,24 +54,32 @@ double normalDistribution() {
 	return sqrt(-2 * log(u1)) * cos(2 * 3.141592 * u2);
 }
 
+// [TODO] Why does _inclusiveLowerLimit have a prefix-underscore?
 int getRandomInt(int _inclusiveLowerLimit, int inclusiveUpperLimit) {
 	uniform_int_distribution<int> distribution(_inclusiveLowerLimit, inclusiveUpperLimit);
 	return distribution(random_engine);
 }
 
-std::vector<std::string> splitString(std::string s, char c) {
-	std::vector<string> elems;
-	std::stringstream ss(s);
-	std::string number;
+// [TODO] Are the bounds inclusive?
+// [TODO] Is this just a close duplicate of normalDistribution()
+double getRandomDouble(double lowerBound, double upperBound) {
+	uniform_real_distribution<double> distribution(lowerBound, upperBound);
+	return distribution(random_engine);
+}
 
-	while (std::getline(ss, number, c)) {
+vector<string> splitString(string s, char c) {
+	vector<string> elems;
+	stringstream ss(s);
+	string number;
+
+	while (getline(ss, number, c)) {
 		elems.push_back(number);
 	}
 
 	return elems;
 }
 
-std::string getHex(char c) {
+string getHex(char c) {
 	string chars = "0123456789ABCDEF";
 	string retVal = "";
 	int val = (int)c;
@@ -90,11 +97,11 @@ std::string getHex(char c) {
 }
 
 // [TODO] Decide if we want to remove this in favor of throwing exceptions only
-void error(std::string value) {
+void error(string value) {
 	cout << "Error: " << value << endl;
 }
 
-std::string exePath() {
+string exePath() {
 	char buffer[MAX_PATH];
 	GetModuleFileName(NULL, buffer, MAX_PATH);
 	string::size_type pos = string(buffer).find_last_of("\\/");
@@ -117,4 +124,16 @@ std::vector<string> getAllFiles(std::string folder) {
 		::FindClose(hFind);
 	}
 	return names;
+}
+
+vector<vector<string>> dataFromCSV(string filename) {
+	vector<vector<string>> retVal;
+
+	ifstream infile(filename);
+	for (string line;getline(infile, line);) {
+		vector<string> lineData = splitString(line, ',');
+		retVal.push_back(lineData);
+	}
+
+	return retVal;
 }

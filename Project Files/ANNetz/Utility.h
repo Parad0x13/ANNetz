@@ -2,7 +2,6 @@
 #define UTILITY_H
 
 #include <random>
-#include <string.h>
 #include <string>
 #include <vector>
 #include <sstream>
@@ -16,10 +15,14 @@ std::string getTag(int, int, std::string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 double normalDistribution();
 int getRandomInt(int, int);
+double getRandomDouble(double, double);
 std::vector<std::string> splitString(std::string, char);
 std::string getHex(char);
 
 void error(std::string);
 std::string exePath();
+
 std::vector<std::string> getAllFiles(std::string);
+
+std::vector<std::vector<std::string>> dataFromCSV(std::string);
 #endif

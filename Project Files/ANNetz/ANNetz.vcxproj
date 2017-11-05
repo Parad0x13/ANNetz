@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BATLayer.cpp" />
+    <ClCompile Include="BATNet.cpp" />
+    <ClCompile Include="BATNode.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentManager.cpp" />
     <ClCompile Include="Connection.cpp" />
@@ -33,6 +36,9 @@
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BATLayer.h" />
+    <ClInclude Include="BATNet.h" />
+    <ClInclude Include="BATNode.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentManager.h" />
     <ClInclude Include="Connection.h" />
@@ -57,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="index.txt" />
+    <Text Include="irisData.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

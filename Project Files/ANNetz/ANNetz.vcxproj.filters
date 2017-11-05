@@ -51,6 +51,15 @@
     <ClCompile Include="DXFramework.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BATNet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BATNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BATLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -92,6 +101,15 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BATNet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BATNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BATLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="0.bmp">
@@ -115,6 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="index.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="irisData.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

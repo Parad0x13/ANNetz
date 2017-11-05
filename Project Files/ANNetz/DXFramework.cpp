@@ -8,7 +8,6 @@ using namespace std;
 
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
-//constructor
 DXFramework::DXFramework() {
 	//Create Data, train on it and recreate cm
 	std::vector<::vector<double*>> inputs = std::vector<std::vector<double*>>(4);
@@ -579,4 +578,3 @@ void DXFramework::render() {
 void DXFramework::refreshPositions() {
 	positions = cm.getPositions();	
 }
-
