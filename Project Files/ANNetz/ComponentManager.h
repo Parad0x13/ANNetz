@@ -32,6 +32,7 @@ public:
 	std::vector<SimpleVertex> getVertices(std::vector<short>*);
 	std::vector<short> getIndices(std::vector<short>*);
 	std::vector<XMFLOAT3> getPositions();
+	std::vector<short> getTextureIDs();
 
 private:
 	int inputSize, OutputSize;

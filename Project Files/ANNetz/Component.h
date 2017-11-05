@@ -15,6 +15,7 @@ public:
 	//DX stuff
 	virtual std::vector<SimpleVertex> getVertices() = 0;
 	virtual std::vector<short> getIndices() = 0;
+	short textureID;
 
 protected:
 	std::vector<double*> input;

@@ -34,8 +34,7 @@ Network::Network(vector<int> neuronsPerLayer) {
 		}
 	}
 
-	// [TODO] Find out why this comment is on it's very own line without any logic following it
-	// Interconect all Neurons to their next layer
+	textureID = 1;
 }
 
 Network::~Network() {
@@ -113,20 +112,21 @@ void Network::calcOut() {
 }
 
 std::vector<SimpleVertex> Network::getVertices() {
-	std::vector<SimpleVertex> ret = std::vector<SimpleVertex>(3);
+	std::vector<SimpleVertex> ret = std::vector<SimpleVertex>(4);
 
-	ret[0] = { XMFLOAT3(-0.5f, 0, 0), XMFLOAT2(0.0f, 0.0f) };
-	ret[1] = { XMFLOAT3(0, 0.866f, 0), XMFLOAT2(1.0f, 0.0f) };
-	ret[2] = { XMFLOAT3(0.5f, 0, 0), XMFLOAT2(0.0f, 1.0f) };
+	ret[0] = { XMFLOAT3(-0.5f, -0.5f, 0), XMFLOAT2(0.0f, 1.0f) };
+	ret[1] = { XMFLOAT3(0.5f, -0.5f, 0), XMFLOAT2(1.0f, 1.0f) };
+	ret[2] = { XMFLOAT3(-0.5f, 0.5f, 0), XMFLOAT2(0.0f, 0.0f) };
+	ret[3] = { XMFLOAT3(0.5f, 0.5f, 0), XMFLOAT2(1.0f, 0.0f) };
 
 	return ret;
 }
 
 std::vector<short> Network::getIndices() {
-	std::vector<short> ret = std::vector<short>(3);
-	ret[0] = 0;
-	ret[1] = 1;
-	ret[2] = 2;
+	std::vector<short> ret = std::vector<short>{
+		2, 1, 0,
+		2, 3, 1
+	};
 
 	return ret;
 }

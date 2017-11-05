@@ -161,6 +161,18 @@ std::vector<XMFLOAT3> ComponentManager::getPositions() {
 	return ret;
 }
 
+std::vector<short> ComponentManager::getTextureIDs() {
+	std::vector<short> ret;
+
+	for (int layer = 0; layer < components.size(); layer++) {
+		for (int index = 0; index < components[layer].size(); index++) {
+			ret.push_back(components[layer][index]->textureID);
+		}
+	}
+
+	return ret;
+}
+
 std::vector<double*> ComponentManager::BMToArray(std::string path, BmChannelFilter bmc) {
 	vector<double*> retVal;
 

@@ -1,7 +1,8 @@
 #include <iostream>
 #include "DXFramework.h"
 #include "global.h"
-
+#include <Windows.h>
+#include <filesystem>
 
 using namespace std;
 
@@ -98,7 +99,7 @@ HRESULT DXFramework::InitDevice() {
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.OutputWindow = g_hWnd;
 	sd.SampleDesc.Count = 1;
-	sd.SampleDesc.Quality = 0;
+	sd.SampleDesc.Quality = 0.9f;
 	sd.Windowed = TRUE;
 
 	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
@@ -242,12 +243,6 @@ HRESULT DXFramework::InitDevice() {
 	if (FAILED(hr))
 		return hr;
 
-	// Load the Texture
-	s = exePath() + "\\seafloor.dds";
-	hr = D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, s.c_str() , NULL, NULL, &g_pTextureRV, NULL);
-	if (FAILED(hr))
-		return hr;
-
 	// Create the sample state
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(sampDesc));
@@ -281,6 +276,8 @@ HRESULT DXFramework::InitDevice() {
 	CBChangeOnResize cbChangesOnResize;
 	cbChangesOnResize.mProjection = XMMatrixTranspose(g_Projection);
 	g_pImmediateContext->UpdateSubresource(g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0);
+
+	loadTextures(exePath() + "\\textures");
 
 	return S_OK;
 }
@@ -381,6 +378,20 @@ HRESULT DXFramework::CompileShaderFromFile(LPCSTR szFileName, LPCSTR szEntryPoin
 	return S_OK;
 }
 
+void DXFramework::loadTextures(std::string path) {
+	std::vector<std::string> files = getAllFiles(path);
+
+	cout << "Loading textures: " << endl;
+	for (int i = 0; i < files.size(); i++) {
+		cout << files[i] << endl;
+
+		string s = path + "\\" + files[i];
+		ID3D11ShaderResourceView* texture;
+		D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, s.c_str(), NULL, NULL, &texture, NULL);
+		g_pTexturesRV.push_back(texture);
+	}	
+}
+
 //Buffer
 void DXFramework::createVB(std::vector<SimpleVertex>* vertices) {
 
@@ -474,6 +485,7 @@ int DXFramework::wWinMain() {
 	//refreshIBuffer(&indices);
 
 	refreshPositions();
+	textureIDs = cm.getTextureIDs();
 
 	// Main message loop
 	MSG msg = { 0 };
@@ -486,7 +498,7 @@ int DXFramework::wWinMain() {
 		}
 		else
 		{
-			Render();
+			render();
 		}
 	}
 
@@ -495,7 +507,7 @@ int DXFramework::wWinMain() {
 	return (int)msg.wParam;
 }
 
-void DXFramework::Render() {
+void DXFramework::render() {
 
 	// Update our time
 	static float t = 0.0f;
@@ -511,10 +523,6 @@ void DXFramework::Render() {
 			dwTimeStart = dwTimeCur;
 		t = (dwTimeCur - dwTimeStart) / 1000.0f;
 	}
-
-	// Rotate cube around the origin
-	g_World = XMMatrixRotationY(t);
-	//g_World *= XMMatrixTranslation(2, 0, 5);
 
 	// Modify the color
 	g_vMeshColor.x = (sinf(t * 1.0f) + 1.0f) * 0.5f;
@@ -543,7 +551,6 @@ void DXFramework::Render() {
 	g_pImmediateContext->VSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
 	g_pImmediateContext->PSSetShader(g_pPixelShader, NULL, 0);
 	g_pImmediateContext->PSSetConstantBuffers(2, 1, &g_pCBChangesEveryFrame);
-	g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV);
 	g_pImmediateContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
 
 	CBChangesEveryFrame cb;
@@ -556,6 +563,7 @@ void DXFramework::Render() {
 		cb.vMeshColor = g_vMeshColor;
 		g_pImmediateContext->UpdateSubresource(g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0);
 
+		g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTexturesRV[textureIDs[i]]); //set texture
 
 		g_pImmediateContext->DrawIndexed(iCount[i], iStart, vStart);
 		iStart += iCount[i];

@@ -64,7 +64,7 @@ private:
 	ID3D11Buffer*                       g_pCBNeverChanges = NULL;
 	ID3D11Buffer*                       g_pCBChangeOnResize = NULL;
 	ID3D11Buffer*                       g_pCBChangesEveryFrame = NULL;
-	ID3D11ShaderResourceView*           g_pTextureRV = NULL;
+	std::vector<ID3D11ShaderResourceView*>	g_pTexturesRV;
 	ID3D11SamplerState*                 g_pSamplerLinear = NULL;
 	XMMATRIX                            g_World;
 	XMMATRIX                            g_View;
@@ -76,8 +76,19 @@ private:
 	HRESULT CompileShaderFromFile(LPCSTR, LPCSTR, LPCSTR, ID3DBlob**);
 	HRESULT InitWindow();
 	HRESULT InitDevice();
+
+
+	//components
+	ComponentManager cm = ComponentManager(2, 1, 3);
+	std::vector<short> vCount, iCount, textureIDs;
+	std::vector<XMFLOAT3> positions;
+
+	Network network = Network({ 2, 2, 1 });
+
+	//voids
 	void CleanupDevice();
-	void Render();
+	void render();
+	void loadTextures(std::string path);
 
 	void createVB(std::vector<SimpleVertex>*);
 	void createIB(std::vector<short>*);
@@ -85,11 +96,4 @@ private:
 	void refreshVBuffer(std::vector<SimpleVertex>*);
 	void refreshIBuffer(std::vector<short>*);
 	void refreshPositions();
-
-	//components
-	ComponentManager cm = ComponentManager(2, 1, 3);
-	std::vector<short> vCount, iCount;
-	std::vector<XMFLOAT3> positions;
-
-	Network network = Network({ 2, 2, 1 });
 };

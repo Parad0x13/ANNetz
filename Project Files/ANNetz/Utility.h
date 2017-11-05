@@ -21,4 +21,5 @@ std::string getHex(char);
 
 void error(std::string);
 std::string exePath();
+std::vector<std::string> getAllFiles(std::string);
 #endif

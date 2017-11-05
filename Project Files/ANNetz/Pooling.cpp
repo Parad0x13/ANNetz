@@ -4,6 +4,7 @@
 
 Pooling::Pooling(int _inX, int _inY) {
 	refreshInputSize(_inX, _inY);
+	textureID = 3;
 }
 
 Pooling::~Pooling() {
@@ -11,17 +12,23 @@ Pooling::~Pooling() {
 }
 
 std::vector<SimpleVertex> Pooling::getVertices() {
-	std::vector<SimpleVertex> ret = std::vector<SimpleVertex>(3);
+	std::vector<SimpleVertex> ret = std::vector<SimpleVertex>(4);
 
-	ret[0] = { XMFLOAT3(-0.5f, 0, 0), XMFLOAT2(0.0f, 0.0f) };
-	ret[1] = { XMFLOAT3(0, 0.866f, 0), XMFLOAT2(1.0f, 0.0f) };
-	ret[2] = { XMFLOAT3(0.5f, 0, 0), XMFLOAT2(0.0f, 1.0f) };
+	ret[0] = { XMFLOAT3(-0.5f, -0.5f, 0), XMFLOAT2(0.0f, 1.0f) };
+	ret[1] = { XMFLOAT3(0.5f, -0.5f, 0), XMFLOAT2(1.0f, 1.0f) };
+	ret[2] = { XMFLOAT3(-0.5f, 0.5f, 0), XMFLOAT2(0.0f, 0.0f) };
+	ret[3] = { XMFLOAT3(0.5f, 0.5f, 0), XMFLOAT2(1.0f, 0.0f) };
 
 	return ret;
 }
 
 std::vector<short> Pooling::getIndices() {
-	return std::vector<short>();
+	std::vector<short> ret = std::vector<short>{
+		2, 1, 0,
+		2, 3, 1
+	};
+
+	return ret;
 }
 
 void Pooling::calcOut() {
