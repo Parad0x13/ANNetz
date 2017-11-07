@@ -23,10 +23,10 @@ int main(int argc, char *argv[]) {
 
 	// [NOTE] Parad0x13 removed this code as the DX11 stuff wasn't workin (resources were not included)
 	// [NOTE] Also to note the copying of files into the build folder should be done automatically e.g. https://gamedev.stackexchange.com/questions/46722/why-cant-my-exe-find-my-fx-file
-	/*cout << exePath() << endl;
+	cout << exePath() << endl;
 	DXFramework *framework = new DXFramework();
 	framework->wWinMain();
-	delete framework;*/
+	delete framework;
 
 	BATNet *net = new BATNet();
 	net->setDataToClassify("irisData.txt", 4, 5);
