@@ -54,16 +54,17 @@
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="0.bmp" />
-    <Image Include="1.bmp" />
-    <Image Include="2.bmp" />
-    <Image Include="3.bmp" />
-    <Image Include="4.bmp" />
-    <Image Include="5.bmp" />
+    <Image Include="textures\Filter.png" />
+    <Image Include="textures\Network.png" />
+    <Image Include="textures\PassThrough.png" />
+    <Image Include="textures\Pooling.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="index.txt" />
     <Text Include="irisData.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="set.fx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -156,8 +157,10 @@
       <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dx11.lib;d3dx10.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
-      <ShaderType>
-      </ShaderType>
+      <ShaderType>Effect</ShaderType>
+      <CompileD2DCustomEffect>
+      </CompileD2DCustomEffect>
+      <ShaderModel>5.0</ShaderModel>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
